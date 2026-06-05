@@ -1,0 +1,81 @@
+# Roadmap — English A1 to B2
+
+Este documento define a trilha de estudo progressiva para a aquisição da língua inglesa, cobrindo desde os fundamentos básicos até a fluência intermediária superior. A ordem dos tópicos foi estruturada para garantir a construção de uma base sólida antes da introdução de conceitos avançados.
+
+## Módulo 1: A1 Beginner (Iniciante)
+O objetivo deste módulo é fornecer as ferramentas essenciais de sobrevivência para se apresentar, descrever o mundo ao redor em termos simples e interagir em situações imediatas.
+
+1. [O Verbo To Be](01-a1-beginner/01-verb-to-be.md)
+2. [Pronomes Pessoais](01-a1-beginner/02-personal-pronouns.md)
+3. [Artigos A, An, The](01-a1-beginner/03-articles-a-an-the.md)
+4. [Presente Simples](01-a1-beginner/04-simple-present.md)
+5. [Presente Contínuo](01-a1-beginner/05-present-continuous.md)
+6. [There is / There are](01-a1-beginner/06-there-is-there-are.md)
+7. [Adjetivos Possessivos](01-a1-beginner/07-possessive-adjectives.md)
+8. [Substantivos Contáveis e Incontáveis](01-a1-beginner/08-countable-uncountable-nouns.md)
+9. [Preposições de Lugar e Tempo](01-a1-beginner/09-prepositions-of-place-and-time.md)
+10. [Perguntas com Wh-](01-a1-beginner/10-wh-questions.md)
+11. [Verbos Modais: Can e Can't](01-a1-beginner/11-can-and-cant.md)
+12. [Modo Imperativo](01-a1-beginner/12-imperative.md)
+13. [Vocabulário Básico (Saudações, Números, Cores)](01-a1-beginner/13-basic-vocabulary-greetings-numbers-colors.md)
+14. [Vocabulário de Rotinas Diárias](01-a1-beginner/14-daily-routines-vocabulary.md)
+15. [Conversas Básicas (Prática Funcional)](01-a1-beginner/15-basic-conversations.md)
+
+## Módulo 2: A2 Elementary (Elementar)
+O objetivo deste módulo é expandir a capacidade de comunicação para relatar eventos no passado, fazer planos para o futuro, comparar coisas e lidar com a linguagem do dia a dia e viagens.
+
+1. [Passado Simples: Verbos Regulares](02-a2-elementary/01-simple-past-regular.md)
+2. [Passado Simples: Verbos Irregulares](02-a2-elementary/02-simple-past-irregular.md)
+3. [Passado Contínuo](02-a2-elementary/03-past-continuous.md)
+4. [Futuro: Will e Going To](02-a2-elementary/04-future-will-going-to.md)
+5. [Comparativos e Superlativos](02-a2-elementary/05-comparatives-and-superlatives.md)
+6. [Advérbios de Frequência](02-a2-elementary/06-adverbs-of-frequency.md)
+7. [Pronomes Objetos](02-a2-elementary/07-object-pronouns.md)
+8. [Quantificadores: Some, Any, Much, Many](02-a2-elementary/08-some-any-much-many.md)
+9. [Preposições de Movimento](02-a2-elementary/09-prepositions-of-movement.md)
+10. [Palavras de Ligação (And, But, Because, So)](02-a2-elementary/10-linking-words-and-but-because-so.md)
+11. [Obrigações: Have to e Must](02-a2-elementary/11-have-to-must.md)
+12. [Pronomes Possessivos e Whose](02-a2-elementary/12-possessive-pronouns-and-whose.md)
+13. [Vocabulário: Comida e Restaurantes](02-a2-elementary/13-food-and-restaurants-vocabulary.md)
+14. [Vocabulário: Viagens e Direções](02-a2-elementary/14-travel-and-directions-vocabulary.md)
+15. [Prática: Contando Histórias e Experiências](02-a2-elementary/15-telling-stories-and-experiences.md)
+
+## Módulo 3: B1 Intermediate (Intermediário)
+Este módulo é o divisor de águas da fluência. Foca na capacidade de conectar o passado ao presente (Present Perfect), defender opiniões, e começar a navegar com independência no ambiente profissional.
+
+1. [Present Perfect Simple](03-b1-intermediate/01-present-perfect-simple.md)
+2. [Present Perfect vs. Simple Past](03-b1-intermediate/02-present-perfect-vs-simple-past.md)
+3. [Present Perfect Continuous](03-b1-intermediate/03-present-perfect-continuous.md)
+4. [Past Perfect](03-b1-intermediate/04-past-perfect.md)
+5. [First Conditional](03-b1-intermediate/05-first-conditional.md)
+6. [Second Conditional](03-b1-intermediate/06-second-conditional.md)
+7. [Voz Passiva](03-b1-intermediate/07-passive-voice.md)
+8. [Orações Relativas (Who, Which, That)](03-b1-intermediate/08-relative-clauses.md)
+9. [Discurso Indireto (Reported Speech)](03-b1-intermediate/09-reported-speech.md)
+10. [Modais de Probabilidade e Conselho (Might, Should, Would)](03-b1-intermediate/10-modal-verbs-might-should-would.md)
+11. [Gerúndios e Infinitivos](03-b1-intermediate/11-gerunds-and-infinitives.md)
+12. [Phrasal Verbs Essenciais](03-b1-intermediate/12-phrasal-verbs-essentials.md)
+13. [Vocabulário: Trabalho e Carreira](03-b1-intermediate/13-work-and-career-vocabulary.md)
+14. [Vocabulário: Tecnologia e Internet](03-b1-intermediate/14-technology-vocabulary.md)
+15. [Prática Funcional: Expressando Opiniões](03-b1-intermediate/15-expressing-opinions.md)
+16. [Registro: Formal vs. Informal](03-b1-intermediate/16-formal-vs-informal-register.md)
+
+## Módulo 4: B2 Upper-Intermediate (Intermediário Superior)
+O objetivo deste módulo é lapidar a fluência para ambientes corporativos e acadêmicos. O foco está na riqueza vocabular, estruturas complexas para ênfase e compreensão avançada de leitura e debate.
+
+1. [Third Conditional](04-b2-upper-intermediate/01-third-conditional.md)
+2. [Mixed Conditionals](04-b2-upper-intermediate/02-mixed-conditionals.md)
+3. [Future Perfect e Future Continuous](04-b2-upper-intermediate/03-future-perfect-and-continuous.md)
+4. [Estruturas Passivas Avançadas (Reporting e Causative)](04-b2-upper-intermediate/04-advanced-passive-structures.md)
+5. [Wish e If Only (Desejos e Arrependimentos)](04-b2-upper-intermediate/05-wish-and-if-only.md)
+6. [Cleft Sentences (Para Ênfase)](04-b2-upper-intermediate/06-cleft-sentences.md)
+7. [Inversion (Inversão)](04-b2-upper-intermediate/07-inversion.md)
+8. [Orações Relativas Avançadas (Com vírgula e Whom)](04-b2-upper-intermediate/08-advanced-relative-clauses.md)
+9. [Discurso Indireto Avançado (Reporting Verbs)](04-b2-upper-intermediate/09-advanced-reported-speech.md)
+10. [Collocations e Expressões Fixas](04-b2-upper-intermediate/10-collocations-and-fixed-expressions.md)
+11. [Phrasal Verbs Avançados](04-b2-upper-intermediate/11-advanced-phrasal-verbs.md)
+12. [Conectivos Avançados (Linking Devices)](04-b2-upper-intermediate/12-linking-devices-advanced.md)
+13. [Expressões Idiomáticas (Idioms)](04-b2-upper-intermediate/13-idiomatic-expressions.md)
+14. [Escrita Acadêmica e Profissional](04-b2-upper-intermediate/14-academic-and-professional-writing.md)
+15. [Prática Funcional: Argumentação e Debate](04-b2-upper-intermediate/15-argumentation-and-debate.md)
+16. [Estratégias de Leitura (Skimming e Scanning)](04-b2-upper-intermediate/16-reading-comprehension-strategies.md)

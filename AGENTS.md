@@ -62,11 +62,11 @@ Todo o material de estudo fica na raiz do repositório.
 ```
 ├── AGENTS.md
 ├── README.md
-├── roadmap.md
-├── progress.md
-├── glossary.md
 ├── distributed-systems/
 │   ├── README.md
+│   ├── roadmap.md
+│   ├── progress.md
+│   ├── glossary.md
 │   ├── 01-foundations/
 │   │   ├── 01-what-is-distributed-system.md
 │   │   └── 02-why-distributed-system.md
@@ -75,6 +75,9 @@ Todo o material de estudo fica na raiz do repositório.
 │       └── 02-message-queues.md
 ├── english/
 │   ├── README.md
+│   ├── roadmap.md
+│   ├── progress.md
+│   ├── glossary.md
 │   ├── 01-grammar/
 │   │   ├── 01-verb-tenses-overview.md
 │   │   ├── 02-present-perfect.md
@@ -101,15 +104,15 @@ Todo o material de estudo fica na raiz do repositório.
 
 ## Artefatos de Controle
 
-O repositório mantém três artefatos de controle na raiz. Eles devem ser atualizados sempre que novos materiais forem adicionados.
+Cada pasta de assunto mantém três artefatos de controle. Eles devem ser atualizados sempre que novos materiais forem adicionados ao respectivo assunto.
 
-### `roadmap.md` — Índice Global
+### `<assunto>/roadmap.md` — Roadmap do Assunto
 
-Índice geral de todos os assuntos com links para cada `README.md` de assunto. Define a ordem macro de estudo e as dependências entre assuntos.
+Índice do assunto com links para cada módulo e tópico. Define a ordem de estudo e as dependências entre tópicos dentro do assunto.
 
-### `progress.md` — Progresso de Estudo
+### `<assunto>/progress.md` — Progresso de Estudo
 
-Rastreia o estado de cada tópico. Usar a seguinte notação:
+Rastreia o estado de cada tópico do assunto. Usar a seguinte notação:
 
 ```markdown
 - [x] Tópico concluído
@@ -117,9 +120,9 @@ Rastreia o estado de cada tópico. Usar a seguinte notação:
 - [ ] Tópico pendente
 ```
 
-### `glossary.md` — Glossário
+### `<assunto>/glossary.md` — Glossário do Assunto
 
-Termos relevantes com definições curtas, organizados por área de conhecimento e em ordem alfabética dentro de cada área. Atualizar sempre que um termo novo e significativo for introduzido nos materiais.
+Termos relevantes do assunto com definições curtas, organizados em ordem alfabética. Atualizar sempre que um termo novo e significativo for introduzido nos materiais do assunto.
 
 ---
 
@@ -191,9 +194,9 @@ Ao receber uma solicitação de estudo, seguir este fluxo:
 3. Identificar dependências com outros assuntos existentes
 4. Criar subpastas numeradas para cada módulo
 5. Gerar todos os arquivos de tópicos com o template obrigatório
-6. Atualizar `roadmap.md` com o novo assunto
-7. Atualizar `progress.md` com os novos tópicos
-8. Atualizar `glossary.md` com termos relevantes
+6. Criar `<assunto>/roadmap.md` com o roadmap do assunto
+7. Criar `<assunto>/progress.md` com os novos tópicos
+8. Criar `<assunto>/glossary.md` com termos relevantes
 ```
 
 ### 2. Novo Tópico em Assunto Existente
@@ -203,8 +206,8 @@ Ao receber uma solicitação de estudo, seguir este fluxo:
 2. Criar o arquivo com o template obrigatório
 3. Adicionar links relativos de/para tópicos relacionados
 4. Atualizar o README.md do assunto
-5. Atualizar `progress.md`
-6. Atualizar `glossary.md` se necessário
+5. Atualizar `<assunto>/progress.md`
+6. Atualizar `<assunto>/glossary.md` se necessário
 ```
 
 ### 3. Revisão de Tópico Existente
@@ -214,7 +217,7 @@ Ao receber uma solicitação de estudo, seguir este fluxo:
 2. Validar que links relativos estão funcionais
 3. Adicionar ou atualizar diagramas Mermaid
 4. Garantir consistência com materiais relacionados
-5. Atualizar `progress.md` com novo status
+5. Atualizar `<assunto>/progress.md` com novo status
 ```
 
 ---
@@ -247,7 +250,7 @@ Ao adicionar ou modificar materiais:
 - Manter o mesmo nível de profundidade entre tópicos do mesmo módulo.
 - Garantir que referências cruzadas apontem para arquivos existentes.
 - Verificar se o `README.md` do assunto reflete os arquivos reais da pasta.
-- Manter `roadmap.md`, `progress.md` e `glossary.md` atualizados.
+- Manter `roadmap.md`, `progress.md` e `glossary.md` do assunto atualizados.
 
 ---
 

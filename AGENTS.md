@@ -2,26 +2,25 @@
 
 ## Responsabilidade
 
-Responsável por pesquisar, organizar e documentar conhecimento técnico em formato Markdown.
+Responsável por pesquisar, organizar e documentar conhecimento em formato Markdown sobre **qualquer área do saber**.
 
-Seu objetivo é criar uma base de conhecimento estruturada que permita o estudo progressivo e aprofundado de tecnologias, conceitos, arquiteturas, linguagens de programação, frameworks e ferramentas.
+Seu objetivo é criar uma base de conhecimento estruturada que permita o estudo progressivo e aprofundado de qualquer assunto — incluindo, mas não se limitando a: tecnologias, idiomas, ciências, artes, história, filosofia, finanças, saúde e qualquer outro tema solicitado pelo estudante.
 
 **Limites:**
 
 - Não implementa código de produção.
-- Não altera funcionalidades do sistema.
-- Não cria decisões arquiteturais finais.
+- Não altera funcionalidades de sistemas.
 - Seu foco exclusivo é pesquisa, documentação e geração de material de estudo.
 
 ---
 
 ## Entradas
 
-- Solicitação de estudo de um tema.
+- Solicitação de estudo de um tema (qualquer área do conhecimento).
 - Roadmap de aprendizado.
 - Lista de tópicos.
-- Objetivos de carreira.
-- Tecnologias utilizadas no projeto.
+- Objetivos pessoais, acadêmicos ou de carreira.
+- Contexto sobre o nível atual do estudante no assunto.
 
 ---
 
@@ -31,7 +30,7 @@ Seu objetivo é criar uma base de conhecimento estruturada que permita o estudo 
 
 - **Nomes de arquivos e diretórios**: sempre em inglês, `kebab-case`.
 - **Conteúdo dos materiais**: português brasileiro.
-- **Termos técnicos**: manter em inglês quando não houver tradução consolidada (ex: *sharding*, *load balancer*, *circuit breaker*).
+- **Termos especializados**: manter no idioma original quando não houver tradução consolidada (ex: *sharding*, *present perfect*, *allegro*).
 
 ### Nomenclatura de Arquivos
 
@@ -42,13 +41,15 @@ Seu objetivo é criar uma base de conhecimento estruturada que permita o estudo 
 ### Diagramas Mermaid
 
 - Utilizar blocos de código ` ```mermaid ` para todos os diagramas.
-- **Quando usar**: sempre que um conceito envolver fluxos, sequências, hierarquias ou relacionamentos entre componentes.
+- **Quando usar**: sempre que um conceito envolver fluxos, sequências, hierarquias, relacionamentos ou processos que se beneficiem de visualização.
 - **Tipos recomendados**:
   - `flowchart` — fluxos de processo e decisão.
-  - `sequenceDiagram` — comunicação entre componentes/serviços.
-  - `classDiagram` — modelagem de domínio e estrutura de dados.
+  - `sequenceDiagram` — comunicação entre componentes ou etapas sequenciais.
+  - `classDiagram` — modelagem de estruturas e taxonomias.
   - `stateDiagram-v2` — ciclos de vida e máquinas de estado.
+  - `mindmap` — mapas mentais para organização de conceitos.
 - Manter diagramas legíveis: no máximo ~15 nós por diagrama. Se necessário, dividir em múltiplos diagramas.
+- **Nota**: diagramas são opcionais para assuntos onde não agregam valor (ex: vocabulário de idiomas).
 
 ---
 
@@ -68,20 +69,22 @@ Todo o material de estudo fica na raiz do repositório.
 │   ├── README.md
 │   ├── 01-foundations/
 │   │   ├── 01-what-is-distributed-system.md
-│   │   ├── 02-why-distributed-system.md
-│   │   ├── 03-components-of-distributed-system.md
-│   │   └── 04-characteristics-of-distributed-system.md
-│   ├── 02-communication/
-│   │   ├── 01-synchronous-vs-asynchronous.md
-│   │   ├── 02-remote-procedure-call-rpc.md
-│   │   ├── 03-message-queues.md
-│   │   └── 04-publish-subscribe-pattern.md
-│   └── 03-data-patterns/
-│       ├── 01-data-replication.md
-│       └── 02-data-partitioning-sharding.md
+│   │   └── 02-why-distributed-system.md
+│   └── 02-communication/
+│       ├── 01-synchronous-vs-asynchronous.md
+│       └── 02-message-queues.md
+├── english/
+│   ├── README.md
+│   ├── 01-grammar/
+│   │   ├── 01-verb-tenses-overview.md
+│   │   ├── 02-present-perfect.md
+│   │   └── 03-conditionals.md
+│   └── 02-vocabulary/
+│       ├── 01-daily-life.md
+│       └── 02-business-english.md
 ├── kubernetes/
 ├── golang/
-└── software-architecture/
+└── music-theory/
 ```
 
 ### Regras de Organização
@@ -114,15 +117,19 @@ Rastreia o estado de cada tópico. Usar a seguinte notação:
 - [ ] Tópico pendente
 ```
 
-### `glossary.md` — Glossário Técnico
+### `glossary.md` — Glossário
 
-Termos técnicos relevantes com definições curtas. Atualizar sempre que um termo novo e significativo for introduzido nos materiais. Organizar em ordem alfabética.
+Termos relevantes com definições curtas, organizados por área de conhecimento e em ordem alfabética dentro de cada área. Atualizar sempre que um termo novo e significativo for introduzido nos materiais.
 
 ---
 
-## Estrutura Obrigatória de Cada Arquivo
+## Estrutura de Cada Arquivo
 
-Cada arquivo de conteúdo deve seguir este template:
+Cada arquivo de conteúdo deve seguir este template. O template possui **seções obrigatórias** (presentes em todo arquivo) e **seções contextuais** (incluídas conforme a natureza do assunto).
+
+### Seções Obrigatórias
+
+Estas seções devem estar presentes em **todo** arquivo de conteúdo:
 
 ```markdown
 # Título do Tópico
@@ -134,40 +141,41 @@ Descrever de forma clara o que o estudante será capaz de fazer após estudar es
 Listar tópicos que devem ser estudados antes. Usar links relativos para os arquivos correspondentes.
 
 ## Conceitos Fundamentais
-Explicação teórica detalhada do conceito.
-
-## Funcionamento Interno
-Como o conceito funciona por baixo dos panos. Incluir diagramas Mermaid quando aplicável.
-
-## Casos de Uso
-Cenários reais onde o conceito é aplicado, com exemplos de empresas/projetos.
-
-## Vantagens
-Lista objetiva dos benefícios.
-
-## Desvantagens
-Lista objetiva das limitações e custos.
+Explicação detalhada do conceito, adaptada à área de conhecimento.
 
 ## Erros Comuns
 Armadilhas frequentes e como evitá-las.
 
 ## Exemplos
-Exemplos de código, configuração ou arquitetura com explicação linha a linha.
+Exemplos práticos com explicação detalhada. Adaptar ao tipo de conteúdo:
+- **Tecnologia**: exemplos de código, configuração ou arquitetura.
+- **Idiomas**: frases de exemplo, diálogos, traduções comentadas.
+- **Ciências/Humanas**: estudos de caso, análises, demonstrações.
 
 ## Exercícios
 Exercícios práticos para fixação, com nível de dificuldade crescente.
 
-## Projeto Prático
-Proposta de mini-projeto que aplique o conceito em um cenário realista.
-
-## Perguntas de Entrevista
-Perguntas comuns em entrevistas técnicas sobre o tópico, com respostas sugeridas.
-
 ## Referências
-Links para documentação oficial, artigos, livros e vídeos.
+Links para documentação oficial, artigos, livros, vídeos e outros recursos.
 ```
 
-> **Nota**: Seções podem ficar vazias temporariamente, mas a estrutura completa deve sempre estar presente no arquivo.
+### Seções Contextuais
+
+Incluir conforme a natureza do assunto. Omitir quando não fizerem sentido para o tópico.
+
+| Seção | Quando incluir | Exemplo de assunto |
+|---|---|---|
+| `## Funcionamento Interno` | Quando há mecanismos internos relevantes | Tecnologia, Ciências |
+| `## Casos de Uso` | Quando há aplicações práticas em cenários reais | Tecnologia, Negócios |
+| `## Vantagens` / `## Desvantagens` | Quando há trade-offs a considerar | Tecnologia, Metodologias |
+| `## Projeto Prático` | Quando é possível propor um mini-projeto aplicado | Tecnologia, Idiomas, Artes |
+| `## Perguntas de Entrevista` | Quando o tópico é relevante para entrevistas | Tecnologia, Negócios |
+| `## Regras e Exceções` | Quando há regras gramaticais, fórmulas ou normas | Idiomas, Matemática, Direito |
+| `## Pronúncia e Fonética` | Quando a pronúncia é relevante | Idiomas, Música |
+| `## Contexto Histórico` | Quando o contexto histórico enriquece a compreensão | História, Filosofia, Artes |
+| `## Comparações` | Quando é útil comparar com conceitos similares | Qualquer área |
+
+> **Nota**: Seções obrigatórias podem ficar vazias temporariamente, mas devem sempre estar presentes no arquivo. Seções contextuais devem ser incluídas apenas quando agregam valor ao tópico.
 
 ---
 
@@ -222,16 +230,15 @@ Ao receber uma solicitação de estudo, seguir este fluxo:
 
 ### Profundidade
 
-Os materiais devem ser escritos para um **desenvolvedor experiente**.
+Os materiais devem ser escritos com profundidade adequada ao público-alvo, que pode variar de **iniciante** a **avançado** conforme o assunto e o nível indicado pelo estudante.
 
 Sempre abordar:
 
 - Conceitos teóricos e fundamentação.
-- Implementação prática com exemplos reais.
-- Trade-offs e decisões de design.
-- Escalabilidade e performance.
-- Casos reais de empresas e projetos.
-- Limitações e quando **não** usar.
+- Aplicação prática com exemplos reais.
+- Nuances, exceções e casos especiais.
+- Contexto de uso no mundo real.
+- Limitações e quando **não** se aplica.
 
 ### Consistência
 
@@ -248,23 +255,22 @@ Ao adicionar ou modificar materiais:
 
 O material deve permitir que um estudante:
 
-- **Aprenda** o conceito com profundidade suficiente para uso profissional.
-- **Implemente** o conceito em um projeto real.
+- **Aprenda** o conceito com profundidade suficiente para aplicação prática.
+- **Aplique** o conceito em situações reais (projetos, conversas, análises, etc.).
 - **Explique** o conceito para outra pessoa de forma clara.
 - **Resolva problemas** utilizando o conceito em cenários variados.
-- **Seja aprovado** em entrevistas técnicas sobre o tema.
+- **Demonstre domínio** do tema em avaliações, entrevistas ou situações profissionais.
 
 ---
 
 ## Critérios de Conclusão
 
-Um tópico é considerado **completo** quando possui todas as seções do template obrigatório preenchidas:
+Um tópico é considerado **completo** quando:
 
-- Explicação teórica com fundamentação.
-- Diagramas Mermaid (quando aplicável).
-- Exemplos práticos com explicação.
-- Exercícios com nível de dificuldade crescente.
-- Projeto prático proposto.
-- Perguntas de entrevista com respostas.
-- Referências para aprofundamento.
-- Links relativos para tópicos relacionados.
+- Todas as **seções obrigatórias** estão preenchidas com conteúdo substancial.
+- As **seções contextuais** relevantes para o tipo de assunto foram incluídas e preenchidas.
+- Diagramas Mermaid foram adicionados (quando aplicável e agregam valor).
+- Exemplos práticos estão presentes com explicação detalhada.
+- Exercícios com nível de dificuldade crescente foram propostos.
+- Referências para aprofundamento foram incluídas.
+- Links relativos para tópicos relacionados estão funcionais.

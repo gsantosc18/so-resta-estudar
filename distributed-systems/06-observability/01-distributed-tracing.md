@@ -18,14 +18,22 @@ Compreender distributed tracing como pilar da observabilidade, como funciona o O
 
 ### Anatomia de um Trace
 
-```
-Trace ID: abc-123
-├── Span A: API Gateway (100ms)
-│   ├── Span B: Auth Service (20ms)
-│   └── Span C: Order Service (70ms)
-│       ├── Span D: Database query (15ms)
-│       └── Span E: Payment Service (45ms)
-│           └── Span F: External API (30ms)
+```mermaid
+flowchart TD
+    Root["Trace ID: abc-123"]
+    SA["Span A: API Gateway (100ms)"]
+    SB["Span B: Auth Service (20ms)"]
+    SC["Span C: Order Service (70ms)"]
+    SD["Span D: Database query (15ms)"]
+    SE["Span E: Payment Service (45ms)"]
+    SF["Span F: External API (30ms)"]
+
+    Root --> SA
+    SA --> SB
+    SA --> SC
+    SC --> SD
+    SC --> SE
+    SE --> SF
 ```
 
 - **Trace**: Representa o fluxo completo de um request (identificado por Trace ID)
@@ -47,8 +55,10 @@ traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
 
 OpenTelemetry (OTel) é o **padrão da indústria** para instrumentação, substituindo OpenTracing e OpenCensus.
 
-```
-App (instrumented) → OTel Collector → Backend (Jaeger, Zipkin, Datadog, Grafana Tempo)
+```mermaid
+flowchart LR
+    A[App instrumentada] -->|exporta spans| O[OTel Collector]
+    O -->|processa e envia| B[Backend: Jaeger / Datadog / Grafana Tempo]
 ```
 
 Componentes:

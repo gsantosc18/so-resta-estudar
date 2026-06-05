@@ -33,22 +33,13 @@ A formulação "escolha dois de três" é simplista e frequentemente mal interpr
 - **Partições de rede são inevitáveis** — não é uma escolha, é uma realidade. Redes falham, switches morrem, cabos são cortados.
 - A verdadeira escolha é: **quando uma partição ocorre**, você prioriza **Consistência (CP)** ou **Disponibilidade (AP)**?
 
-```
-                    ┌─────────────────────┐
-                    │   Partição de Rede   │
-                    │     (inevitável)      │
-                    └──────────┬──────────┘
-                               │
-                    ┌──────────┴──────────┐
-                    │                      │
-              ┌─────▼─────┐         ┌─────▼─────┐
-              │     CP     │         │     AP     │
-              │ Consistência│         │Disponibilidade│
-              │  priorizada │         │  priorizada │
-              └─────┬─────┘         └─────┬─────┘
-                    │                      │
-              Retorna erro           Retorna dados
-              ou bloqueia          (possivelmente stale)
+```mermaid
+flowchart TD
+    A["Partição de Rede<br>(inevitável)"] --> B{"Escolha"}
+    B -->|CP| C["Consistência<br>priorizada"]
+    B -->|AP| D["Disponibilidade<br>priorizada"]
+    C --> E["Retorna erro<br>ou bloqueia"]
+    D --> F["Retorna dados<br>(possivelmente stale)"]
 ```
 
 ### Classificação de Sistemas
@@ -72,19 +63,21 @@ A formulação "escolha dois de três" é simplista e frequentemente mal interpr
 Considere um cluster com 3 nós (N1, N2, N3) e um cliente que escreve dados:
 
 **Cenário normal (sem partição):**
-```
-Cliente → N1 (escrita) → Replica para N2 e N3 → Confirmação
+```mermaid
+flowchart LR
+    Cliente -->|escrita| N1
+    N1 -->|replica| N2
+    N1 -->|replica| N3
+    N1 -->|confirmação| Cliente
 ```
 
 **Cenário com partição:**
-```
-        ┌───────────────────────────────────────┐
-        │          Partição de Rede              │
-        │                                       │
-   ┌────┴────┐                           ┌──────┴──────┐
-   │  N1, N2  │                           │     N3      │
-   │ (maioria)│                           │ (isolado)   │
-   └─────────┘                           └─────────────┘
+```mermaid
+flowchart TD
+    subgraph Partição de Rede
+        A["N1, N2<br>(maioria)"]
+        B["N3<br>(isolado)"]
+    end
 ```
 
 **Se o sistema é CP:**

@@ -20,28 +20,32 @@ Compreender o padrão de banco de dados por serviço, por que ele é fundamental
 
 Cada microserviço é **dono exclusivo** de seus dados e os expõe apenas através de sua API. Nenhum outro serviço acessa diretamente o banco de dados de outro.
 
-```
-❌ Shared Database (antipadrão em microserviços)
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│ OrderService │  │ UserService  │  │ InventoryServ│
-└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-       │                 │                 │
-       └────────────┬────┴────────────────┘
-                    │
-             ┌──────▼──────┐
-             │  PostgreSQL  │  ← Single Point of Failure + acoplamento
-             │   (shared)   │
-             └─────────────┘
+```mermaid
+flowchart TD
+    subgraph Shared Database (Antipadrão)
+        OS1[OrderService]
+        US1[UserService]
+        IS1[InventoryService]
+        DB[(PostgreSQL<br>shared)]
+        
+        OS1 --> DB
+        US1 --> DB
+        IS1 --> DB
+    end
 
-✅ Database per Service
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│ OrderService │  │ UserService  │  │ InventoryServ│
-└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-       │                 │                 │
- ┌─────▼─────┐    ┌─────▼─────┐    ┌─────▼─────┐
- │ PostgreSQL│    │  MongoDB   │    │   Redis    │
- │  (orders) │    │  (users)   │    │ (inventory)│
- └───────────┘    └───────────┘    └───────────┘
+    subgraph Database per Service (Recomendado)
+        OS2[OrderService]
+        US2[UserService]
+        IS2[InventoryService]
+        
+        DB1[(PostgreSQL<br>orders)]
+        DB2[(MongoDB<br>users)]
+        DB3[(Redis<br>inventory)]
+        
+        OS2 --> DB1
+        US2 --> DB2
+        IS2 --> DB3
+    end
 ```
 
 ### Por que não compartilhar o banco?

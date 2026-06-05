@@ -33,48 +33,42 @@ Implementar tudo isso em **cada serviço, em cada linguagem** é duplicação ma
 
 Mover toda a lógica de comunicação para uma **camada de infraestrutura** que roda ao lado de cada serviço (sidecar proxy).
 
-```
-Sem Service Mesh:
-┌──────────────┐            ┌──────────────┐
-│  Service A   │───HTTP────►│  Service B   │
-│  (retry,     │            │  (retry,     │
-│   circuit    │            │   circuit    │
-│   breaker,   │            │   breaker,   │
-│   mTLS,      │            │   mTLS,      │
-│   tracing)   │            │   tracing)   │
-└──────────────┘            └──────────────┘
-
-Com Service Mesh:
-┌──────────────┐  ┌─────────┐     ┌─────────┐  ┌──────────────┐
-│  Service A   │──│ Sidecar │─────│ Sidecar │──│  Service B   │
-│  (apenas     │  │ (Envoy) │     │ (Envoy) │  │  (apenas     │
-│   lógica de  │  │ retry,  │     │ retry,  │  │   lógica de  │
-│   negócio)   │  │ mTLS,   │     │ mTLS,   │  │   negócio)   │
-└──────────────┘  │ tracing │     │ tracing │  └──────────────┘
-                  └─────────┘     └─────────┘
+```mermaid
+flowchart TD
+    subgraph Sem Service Mesh
+        direction LR
+        SA1["Service A<br>(retry, circuit breaker,<br>mTLS, tracing)"]
+        SB1["Service B<br>(retry, circuit breaker,<br>mTLS, tracing)"]
+        SA1 -->|HTTP| SB1
+    end
+    
+    subgraph Com Service Mesh
+        direction LR
+        SA2["Service A<br>(apenas lógica de negócio)"]
+        SCA["Sidecar<br>(Envoy)"]
+        SCB["Sidecar<br>(Envoy)"]
+        SB2["Service B<br>(apenas lógica de negócio)"]
+        
+        SA2 <--> SCA
+        SCA <-->|"retry, mTLS, tracing"| SCB
+        SCB <--> SB2
+    end
 ```
 
 ### Arquitetura
 
-```
-                    ┌──────────────────────┐
-                    │    Control Plane      │
-                    │  (Istiod / linkerd)   │
-                    │                      │
-                    │ - Configuração        │
-                    │ - Certificados (mTLS) │
-                    │ - Políticas           │
-                    │ - Service Discovery   │
-                    └──────────┬───────────┘
-                               │ configura
-                    ┌──────────▼───────────┐
-                    │     Data Plane        │
-                    │  (Sidecar Proxies)    │
-                    │                      │
-                    │  Pod A: [App][Envoy]  │
-                    │  Pod B: [App][Envoy]  │
-                    │  Pod C: [App][Envoy]  │
-                    └──────────────────────┘
+```mermaid
+flowchart TD
+    CP["Control Plane<br>(Istiod / linkerd)<br><br>- Configuração<br>- Certificados (mTLS)<br>- Políticas<br>- Service Discovery"]
+    
+    subgraph Data Plane [Data Plane (Sidecar Proxies)]
+        direction LR
+        P_A["Pod A: [App][Envoy]"]
+        P_B["Pod B: [App][Envoy]"]
+        P_C["Pod C: [App][Envoy]"]
+    end
+    
+    CP -->|configura| Data Plane
 ```
 
 - **Control Plane**: Cérebro do mesh. Distribui configuração, gerencia certificados, define políticas.
@@ -146,8 +140,13 @@ spec:
 5. Envoy encaminha para o Envoy do pod destino
 6. Envoy do destino decripta mTLS e entrega para o serviço
 
-```
-App A → iptables → Envoy A ──mTLS──► Envoy B → iptables → App B
+```mermaid
+flowchart LR
+    A[App A] --> I1[iptables]
+    I1 --> E1[Envoy A]
+    E1 -->|mTLS| E2[Envoy B]
+    E2 --> I2[iptables]
+    I2 --> B[App B]
 ```
 
 ### Traffic Management com Istio
@@ -202,16 +201,19 @@ spec:
 
 ### mTLS Automático
 
-```
-Sem mesh:
-  App A ──HTTP (texto claro)──► App B
-  (qualquer pod no cluster pode interceptar o tráfego)
-
-Com mesh (mTLS automático):
-  App A → Envoy A ──TLS (certificado X.509)──► Envoy B → App B
-  (tráfego encriptado e autenticado entre todos os serviços)
-  (certificados são gerenciados automaticamente pelo control plane)
-  (rotação automática de certificados)
+```mermaid
+flowchart TD
+    subgraph Sem mesh
+        direction LR
+        A1[App A] -->|HTTP texto claro| B1[App B]
+    end
+    
+    subgraph Com mesh (mTLS automático)
+        direction LR
+        A2[App A] --> EA[Envoy A]
+        EA -->|"TLS (X.509)"| EB[Envoy B]
+        EB --> B2[App B]
+    end
 ```
 
 ---

@@ -20,10 +20,14 @@ Entender o papel dos message brokers em arquiteturas distribuídas, comparando K
 
 Um message broker é um **intermediário** que recebe mensagens de produtores, armazena-as e entrega a consumidores. Ele desacopla temporalmente e espacialmente os serviços.
 
-```
-Produtor A ──►┌──────────────────┐──► Consumidor X
-Produtor B ──►│  Message Broker  │──► Consumidor Y
-Produtor C ──►└──────────────────┘──► Consumidor Z
+```mermaid
+flowchart LR
+    PA[Produtor A] --> MB[Message Broker]
+    PB[Produtor B] --> MB
+    PC[Produtor C] --> MB
+    MB --> CX[Consumidor X]
+    MB --> CY[Consumidor Y]
+    MB --> CZ[Consumidor Z]
 ```
 
 ### Modelos de Entrega
@@ -52,18 +56,23 @@ Produtor C ──►└──────────────────┘
 
 Kafka é um **log distribuído e persistente**. Não é uma fila tradicional — é um commit log append-only.
 
-```
-                        Topic: "orders"
-                    ┌──────────────────────┐
-Partition 0:        │ [0] [1] [2] [3] [4]  │ ← append-only
-Partition 1:        │ [0] [1] [2]          │
-Partition 2:        │ [0] [1] [2] [3]      │
-                    └──────────────────────┘
-                              │
-                    ┌─────────┴──────────┐
-                    │   Consumer Group    │
-                    │  C1→P0  C2→P1,P2   │
-                    └────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Topic: orders
+        direction TB
+        P0["Partition 0: [0] [1] [2] [3] [4] ← append-only"]
+        P1["Partition 1: [0] [1] [2]"]
+        P2["Partition 2: [0] [1] [2] [3]"]
+    end
+    
+    subgraph Consumer Group
+        C1["Consumer 1"]
+        C2["Consumer 2"]
+    end
+    
+    P0 --> C1
+    P1 --> C2
+    P2 --> C2
 ```
 
 **Arquitetura**:
@@ -84,13 +93,16 @@ Partition 2:        │ [0] [1] [2] [3]      │
 
 RabbitMQ é um **broker de mensagens tradicional** baseado no protocolo AMQP.
 
-```
-Producer ──► Exchange ──routing──► Queue ──► Consumer
-                │
-                ├── Direct Exchange   (routing key exato)
-                ├── Fanout Exchange   (broadcast para todas as queues)
-                ├── Topic Exchange    (routing key com wildcard)
-                └── Headers Exchange  (match por headers)
+```mermaid
+flowchart LR
+    P[Producer] --> E((Exchange))
+    
+    E -->|Direct<br>routing key exato| Q[(Queue)]
+    E -->|Fanout<br>broadcast| Q
+    E -->|Topic<br>wildcard| Q
+    E -->|Headers<br>match headers| Q
+    
+    Q --> C[Consumer]
 ```
 
 **Arquitetura**:
@@ -110,12 +122,16 @@ Producer ──► Exchange ──routing──► Queue ──► Consumer
 
 NATS é um sistema de mensageria **ultra-leve e de alta performance**, focado em simplicidade.
 
-```
-NATS Core:   Fire-and-forget (at-most-once)
-             Publisher ──subject──► Subscriber(s)
-
-NATS JetStream: Persistência + at-least-once
-             Publisher ──stream──► [Storage] ──► Consumer
+```mermaid
+flowchart LR
+    subgraph NATS Core (Fire-and-forget)
+        P1[Publisher] -->|subject| S1[Subscriber]
+    end
+    
+    subgraph NATS JetStream (Persistência)
+        P2[Publisher] -->|stream| ST[(Storage)]
+        ST --> C2[Consumer]
+    end
 ```
 
 **Características chave**:

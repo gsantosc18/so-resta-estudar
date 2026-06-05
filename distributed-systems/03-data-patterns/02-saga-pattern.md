@@ -26,14 +26,19 @@ Com database-per-service, transações ACID não cruzam fronteiras de serviço. 
 
 Uma Saga é uma **sequência de transações locais** onde cada transação atualiza um serviço e publica um evento/mensagem que dispara a próxima transação. Se uma transação falha, a saga executa **compensating transactions** para desfazer as anteriores.
 
-```
-Sucesso:
-  T1(Order) → T2(Inventory) → T3(Payment) → T4(Notification) ✓
-
-Falha em T3:
-  T1(Order) → T2(Inventory) → T3(Payment) ✗
-                                   │
-                              C2(Inventory) → C1(Order)  ← Compensações
+```mermaid
+flowchart LR
+    subgraph Sucesso
+        direction LR
+        T1[T1: Order] --> T2[T2: Inventory] --> T3[T3: Payment] --> T4[T4: Notification]
+    end
+    
+    subgraph Falha e Compensação
+        direction LR
+        F1[T1: Order] --> F2[T2: Inventory] --> F3[T3: Payment ✗]
+        F3 -.->|Falha| C2[C2: Inventory Comp.]
+        C2 -.-> C1[C1: Order Comp.]
+    end
 ```
 
 ### Orquestração vs Coreografia
@@ -41,16 +46,22 @@ Falha em T3:
 #### Coreografia (Choreography)
 Cada serviço escuta eventos e decide o que fazer. Sem coordenador central.
 
-```
-OrderService ──"OrderCreated"──►
-  InventoryService ──"StockReserved"──►
-    PaymentService ──"PaymentProcessed"──►
-      NotificationService ──"NotificationSent"──► FIM
-
-Falha:
-    PaymentService ──"PaymentFailed"──►
-      InventoryService ──"StockReleased"──►
-        OrderService ──"OrderCancelled"──► FIM
+```mermaid
+flowchart TD
+    subgraph Sucesso
+        direction LR
+        OS1[OrderService] -->|"OrderCreated"| IS1[InventoryService]
+        IS1 -->|"StockReserved"| PS1[PaymentService]
+        PS1 -->|"PaymentProcessed"| NS1[NotificationService]
+        NS1 -->|"NotificationSent"| F1((FIM))
+    end
+    
+    subgraph Falha
+        direction LR
+        PS2[PaymentService] -->|"PaymentFailed"| IS2[InventoryService]
+        IS2 -->|"StockReleased"| OS2[OrderService]
+        OS2 -->|"OrderCancelled"| F2((FIM))
+    end
 ```
 
 **Vantagens**: Simples, baixo acoplamento, sem single point of failure.
@@ -59,16 +70,19 @@ Falha:
 #### Orquestração (Orchestration)
 Um **Saga Orchestrator** (coordenador) controla o fluxo, dizendo a cada serviço o que fazer.
 
-```
-                    ┌──────────────────┐
-                    │ Saga Orchestrator│
-                    └────────┬─────────┘
-                             │
-  ┌──────────┐     ┌────────▼────────┐     ┌──────────┐
-  │ Order    │◄───►│ "Reserve stock" │────►│ Inventory│
-  │ Service  │     │ "Process pay"   │────►│ Payment  │
-  │          │     │ "Send notif"    │────►│ Notif    │
-  └──────────┘     └─────────────────┘     └──────────┘
+```mermaid
+flowchart TD
+    SO[Saga Orchestrator]
+    
+    OS[Order Service]
+    IS[Inventory Service]
+    PS[Payment Service]
+    NS[Notification Service]
+    
+    SO <-->|Controla fluxo| OS
+    SO -->|"Reserve stock"| IS
+    SO -->|"Process pay"| PS
+    SO -->|"Send notif"| NS
 ```
 
 **Vantagens**: Fluxo claro, fácil de entender e debugar, lógica centralizada.
@@ -96,12 +110,21 @@ Uma compensação **desfaz semanticamente** o efeito de uma transação, mas **n
 
 ### Estado da Saga
 
-```
-STARTED → STEP_1_PENDING → STEP_1_COMPLETED →
-  STEP_2_PENDING → STEP_2_COMPLETED →
-  STEP_3_PENDING → STEP_3_FAILED →
-  COMPENSATING_2 → COMPENSATING_1 →
-  COMPENSATED (ou FAILED)
+```mermaid
+stateDiagram-v2
+    [*] --> STARTED
+    STARTED --> STEP_1_PENDING
+    STEP_1_PENDING --> STEP_1_COMPLETED
+    STEP_1_COMPLETED --> STEP_2_PENDING
+    STEP_2_PENDING --> STEP_2_COMPLETED
+    STEP_2_COMPLETED --> STEP_3_PENDING
+    
+    STEP_3_PENDING --> STEP_3_FAILED
+    
+    STEP_3_FAILED --> COMPENSATING_2
+    COMPENSATING_2 --> COMPENSATING_1
+    COMPENSATING_1 --> COMPENSATED
+    COMPENSATING_1 --> FAILED
 ```
 
 ---

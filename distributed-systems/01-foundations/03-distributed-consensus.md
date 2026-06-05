@@ -55,23 +55,13 @@ Raft foi projetado por Diego Ongaro e John Ousterhout em 2014 como uma alternati
 
 #### 1. Leader Election (Eleição de Líder)
 
-```
-Estado dos nós: FOLLOWER → CANDIDATE → LEADER
-
-Início: Todos começam como FOLLOWER
-
-Timeout do Follower (sem heartbeat do líder):
-  → Transição para CANDIDATE
-  → Incrementa term (mandato)
-  → Vota em si mesmo
-  → Envia RequestVote para todos
-  
-Se recebe maioria dos votos:
-  → Torna-se LEADER
-  → Começa a enviar heartbeats
-
-Se recebe heartbeat de líder com term >= seu:
-  → Volta a ser FOLLOWER
+```mermaid
+stateDiagram-v2
+    [*] --> FOLLOWER
+    FOLLOWER --> CANDIDATE : Timeout (sem heartbeat)
+    CANDIDATE --> LEADER : Maioria dos votos
+    LEADER --> FOLLOWER : Heartbeat com term >= seu
+    CANDIDATE --> FOLLOWER : Heartbeat com term >= seu
 ```
 
 **Regras de votação**:
@@ -79,30 +69,39 @@ Se recebe heartbeat de líder com term >= seu:
 - Vota apenas se o candidato tem log **pelo menos tão atualizado** quanto o seu
 - Timeouts são randomizados (150-300ms) para evitar split vote
 
-```
-Tempo →
-
-Nó A (Follower): ────────timeout──→ Candidate ──votes──→ LEADER ──heartbeat──→
-Nó B (Follower): ────────────────────────vote for A──────────────────────────→
-Nó C (Follower): ────────────────────────vote for A──────────────────────────→
-
-Term 1: A é eleito líder com 3/3 votos
+```mermaid
+sequenceDiagram
+    participant A as Nó A (Follower)
+    participant B as Nó B (Follower)
+    participant C as Nó C (Follower)
+    
+    Note over A,C: Term 1
+    A->>A: Timeout → Candidate
+    A->>B: RequestVote
+    A->>C: RequestVote
+    B-->>A: Vote for A
+    C-->>A: Vote for A
+    Note over A: LEADER (3/3 votos)
+    A->>B: Heartbeat
+    A->>C: Heartbeat
 ```
 
 #### 2. Log Replication (Replicação de Log)
 
-```
-Cliente → LEADER: Write(x=5)
-
-LEADER:
-  1. Anexa entry ao log local: {term:1, index:3, cmd:"x=5"}
-  2. Envia AppendEntries RPC para todos os followers
-  3. Followers anexam entry ao log
-  4. Followers respondem com sucesso
-  5. Quando maioria confirma → entry é "committed"
-  6. LEADER aplica ao state machine
-  7. Retorna resultado ao cliente
-  8. Followers aplicam ao state machine no próximo heartbeat
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant L as LEADER
+    participant F as Followers
+    
+    C->>L: Write(x=5)
+    Note over L: 1. Anexa entry ao log
+    L->>F: 2. AppendEntries RPC
+    Note over F: 3. Followers anexam entry
+    F-->>L: 4. Respondem com sucesso
+    Note over L: 5. Maioria confirma → "committed"<br>6. Aplica ao state machine
+    L-->>C: 7. Retorna resultado
+    L->>F: 8. Próximo heartbeat<br>(aplica ao state machine)
 ```
 
 ```
@@ -123,16 +122,18 @@ Paxos, proposto por Leslie Lamport em 1989, resolve consenso em **três fases**:
 
 #### Single-Decree Paxos (um valor)
 
-```
-Fase 1a (Prepare): Proposer envia PREPARE(n) com número de proposta n
-Fase 1b (Promise): Acceptors respondem com PROMISE (prometem não aceitar n' < n)
-                   + valor já aceito anteriormente (se houver)
-
-Fase 2a (Accept):  Proposer envia ACCEPT(n, v) com valor v
-                   (usa valor recebido na Fase 1b, ou propõe novo se nenhum)
-Fase 2b (Accepted): Acceptors aceitam se não prometeram a n' > n
-
-Consenso atingido quando maioria aceita o mesmo (n, v)
+```mermaid
+sequenceDiagram
+    participant P as Proposer
+    participant A as Acceptors
+    
+    Note over P,A: Fase 1
+    P->>A: Fase 1a: PREPARE(n)
+    A-->>P: Fase 1b: PROMISE(n) + valor já aceito
+    Note over P,A: Fase 2
+    P->>A: Fase 2a: ACCEPT(n, v)
+    A-->>P: Fase 2b: ACCEPTED(n, v)
+    Note over P,A: Consenso atingido na maioria
 ```
 
 **Multi-Paxos**: Otimização onde o líder é estável e pula a Fase 1 para propostas subsequentes, indo direto para Accept.

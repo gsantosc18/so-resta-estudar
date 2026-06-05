@@ -31,17 +31,11 @@ Event Sourcing:
 
 ### Componentes
 
-```
-┌─────────┐    append     ┌──────────────┐    replay    ┌──────────┐
-│ Command │───────────►│  Event Store   │───────────►│ Aggregate │
-│         │              │ (append-only)  │              │  (estado) │
-└─────────┘              └──────────────┘              └──────────┘
-                              │
-                         projection
-                              │
-                    ┌─────────▼─────────┐
-                    │  Read Model (View) │
-                    └───────────────────┘
+```mermaid
+flowchart TD
+    C[Command] -->|append| ES[(Event Store<br>append-only)]
+    ES -->|replay| A[Aggregate<br>estado]
+    ES -->|projection| RM[(Read Model<br>View)]
 ```
 
 - **Event Store**: Log append-only de eventos imutáveis

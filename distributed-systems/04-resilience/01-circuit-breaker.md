@@ -20,31 +20,26 @@ Compreender o padrão Circuit Breaker para proteção contra cascata de falhas e
 
 Quando um serviço downstream falha, sem proteção os callers continuam enviando requests que vão falhar, consumindo recursos (threads, conexões, memória) e propagando a falha para cima.
 
-```
-Cliente → A → B → C (falhou!)
-                  ↑
-          A espera timeout (30s)
-          Threads de A esgotam
-          A também falha
-          Cliente perde todos os serviços
+```mermaid
+flowchart LR
+    C[Cliente] --> A[Serviço A]
+    A --> B[Serviço B]
+    B --> C_Serv[Serviço C<br>falhou!]
+    
+    A -.- NoteA[A espera timeout 30s<br>Threads esgotam<br>A falha<br>Cliente perde tudo]
 ```
 
 ### A Solução: Circuit Breaker
 
 Inspirado em disjuntores elétricos — "abre o circuito" quando detecta falhas, impedindo chamadas desnecessárias.
 
-```
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│   CLOSED ──(falhas > threshold)──► OPEN             │
-│     ▲                                │              │
-│     │                          (timeout expira)     │
-│     │                                │              │
-│     └──(sucesso)── HALF-OPEN ◄───────┘              │
-│                       │                             │
-│                  (falha)──► OPEN                     │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+```mermaid
+stateDiagram-v2
+    [*] --> CLOSED
+    CLOSED --> OPEN : falhas > threshold
+    OPEN --> HALF_OPEN : timeout expira
+    HALF_OPEN --> CLOSED : sucesso
+    HALF_OPEN --> OPEN : falha
 ```
 
 **Estados**:

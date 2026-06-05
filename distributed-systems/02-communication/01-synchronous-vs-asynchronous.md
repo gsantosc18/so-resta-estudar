@@ -20,12 +20,17 @@ Entender profundamente os dois paradigmas de comunicação entre serviços distr
 
 O cliente envia uma requisição e **aguarda a resposta** antes de continuar. O fluxo é bloqueante.
 
-```
-Cliente ──req──► Serviço A ──req──► Serviço B
-                                        │
-Cliente ◄──res── Serviço A ◄──res── Serviço B
-         ▲                                  ▲
-         └──── tempo total de espera ───────┘
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant A as Serviço A
+    participant B as Serviço B
+    
+    C->>A: req
+    A->>B: req
+    B-->>A: res
+    A-->>C: res
+    Note over C,B: tempo total de espera (bloqueante)
 ```
 
 **Protocolos comuns**: HTTP/REST, gRPC, GraphQL
@@ -40,10 +45,15 @@ Cliente ◄──res── Serviço A ◄──res── Serviço B
 
 O produtor envia uma mensagem e **não aguarda resposta**. O processamento acontece de forma independente.
 
-```
-Produtor ──msg──► Broker ──msg──► Consumidor
-    │                                  │
-    ▼ (continua imediatamente)         ▼ (processa quando puder)
+```mermaid
+sequenceDiagram
+    participant P as Produtor
+    participant B as Broker
+    participant C as Consumidor
+    
+    P-)B: msg (continua imediatamente)
+    B-)C: msg
+    Note right of C: processa quando puder
 ```
 
 **Tecnologias comuns**: Kafka, RabbitMQ, NATS, Amazon SQS, Redis Streams
@@ -74,54 +84,80 @@ Produtor ──msg──► Broker ──msg──► Consumidor
 ### Padrões de Comunicação Síncrona
 
 #### 1. Request-Response
-```
-A ──GET /users/123──► B
-A ◄──{user: "Alice"}── B
+```mermaid
+sequenceDiagram
+    participant A
+    participant B
+    A->>B: GET /users/123
+    B-->>A: {user: "Alice"}
 ```
 
 #### 2. RPC (Remote Procedure Call)
-```
-A ──GetUser(123)──► B    // parece uma chamada local
-A ◄──User{...}──── B     // mas atravessa a rede
+```mermaid
+sequenceDiagram
+    participant A
+    participant B
+    Note over A: RPC: parece chamada local<br>mas atravessa a rede
+    A->>B: GetUser(123)
+    B-->>A: User{...}
 ```
 
 #### 3. Aggregation (API Gateway)
-```
-Cliente ──req──► Gateway ──req──► Serviço A
-                         ──req──► Serviço B
-                         ──req──► Serviço C
-Cliente ◄──{A+B+C}─── Gateway    // agrega respostas
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant G as Gateway
+    participant SA as Serviço A
+    participant SB as Serviço B
+    participant SC as Serviço C
+    
+    C->>G: req
+    par Gateway para Serviços
+        G->>SA: req
+        G->>SB: req
+        G->>SC: req
+    end
+    Note over G: agrega respostas
+    G-->>C: {A+B+C}
 ```
 
 ### Padrões de Comunicação Assíncrona
 
 #### 1. Point-to-Point (Queue)
-```
-Produtor ──msg──► [Queue] ──msg──► Consumidor único
+```mermaid
+flowchart LR
+    P[Produtor] -->|msg| Q[(Queue)]
+    Q -->|msg| C[Consumidor único]
 ```
 Uma mensagem é processada por **exatamente um** consumidor.
 
 #### 2. Publish-Subscribe (Topic)
-```
-Produtor ──msg──► [Topic] ──msg──► Consumidor A
-                          ──msg──► Consumidor B
-                          ──msg──► Consumidor C
+```mermaid
+flowchart LR
+    P[Produtor] -->|msg| T(((Topic)))
+    T -->|msg| CA[Consumidor A]
+    T -->|msg| CB[Consumidor B]
+    T -->|msg| CC[Consumidor C]
 ```
 Uma mensagem é entregue a **todos** os assinantes.
 
 #### 3. Request-Reply Assíncrono
-```
-A ──request──► [Queue Request]  ──► B
-A ◄──reply──── [Queue Response] ◄── B
+```mermaid
+flowchart LR
+    A -->|request| QR[(Queue Request)]
+    QR --> B
+    B -->|reply| QRes[(Queue Response)]
+    QRes --> A
 ```
 Comunicação assíncrona com correlação de request-response via `correlationId`.
 
 #### 4. Event Notification
-```
-OrderService ──"OrderCreated"──► [Topic]
-                                   ├──► InventoryService
-                                   ├──► NotificationService
-                                   └──► AnalyticsService
+```mermaid
+flowchart LR
+    OS[OrderService] -->|"OrderCreated"| T(((Topic)))
+    T --> IS[InventoryService]
+    T --> NS[NotificationService]
+    T --> AS[AnalyticsService]
 ```
 O produtor **não sabe nem se importa** com quem consome o evento.
 

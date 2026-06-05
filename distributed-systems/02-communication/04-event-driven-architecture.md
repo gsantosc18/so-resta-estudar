@@ -71,11 +71,14 @@ O evento **é** a fonte de verdade. O estado é derivado do replay de eventos.
 #### Mediator Topology
 Um mediador central coordena o fluxo de eventos.
 
-```
-   Evento ──► [Mediador] ──► Step 1 ──► Step 2 ──► Step 3
-                    │
-              Orquestra o fluxo
-              (sabe quem chamar e quando)
+```mermaid
+flowchart LR
+    E[Evento] --> M[Mediador]
+    M --> S1[Step 1]
+    M --> S2[Step 2]
+    M --> S3[Step 3]
+    
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
 ```
 
 **Quando usar**: Fluxos complexos com múltiplos passos e lógica condicional.
@@ -83,11 +86,15 @@ Um mediador central coordena o fluxo de eventos.
 #### Broker Topology
 Sem mediador. Cada componente reage a eventos e publica novos eventos.
 
-```
-OrderService ──"OrderCreated"──► [Broker]
-                                    ├──► InventoryService ──"StockReserved"──► [Broker]
-                                    ├──► PaymentService  ──"PaymentProcessed"──► [Broker]
-                                    └──► NotificationService
+```mermaid
+flowchart LR
+    OS[OrderService] -->|"OrderCreated"| B[(Broker)]
+    B --> IS[InventoryService]
+    B --> PS[PaymentService]
+    B --> NS[NotificationService]
+    
+    IS -->|"StockReserved"| B
+    PS -->|"PaymentProcessed"| B
 ```
 
 **Quando usar**: Fluxos desacoplados onde cada serviço sabe o que fazer com cada evento.
@@ -132,12 +139,12 @@ Um contrato de evento deve ser tratado como uma **API pública**:
 
 ### Correlation e Causation IDs
 
-```
-Request do cliente (correlationId: "abc-123")
-  └─► OrderCreated (eventId: "evt-1", correlationId: "abc-123", causationId: "abc-123")
-       ├─► StockReserved (eventId: "evt-2", correlationId: "abc-123", causationId: "evt-1")
-       └─► PaymentProcessed (eventId: "evt-3", correlationId: "abc-123", causationId: "evt-1")
-            └─► NotificationSent (eventId: "evt-4", correlationId: "abc-123", causationId: "evt-3")
+```mermaid
+flowchart TD
+    Req["Request do cliente<br>correlationId: abc-123"] --> OC["OrderCreated<br>eventId: evt-1<br>causationId: abc-123"]
+    OC --> SR["StockReserved<br>eventId: evt-2<br>causationId: evt-1"]
+    OC --> PP["PaymentProcessed<br>eventId: evt-3<br>causationId: evt-1"]
+    PP --> NS["NotificationSent<br>eventId: evt-4<br>causationId: evt-3"]
 ```
 
 - **correlationId**: Identifica toda a cadeia de eventos originada de um request

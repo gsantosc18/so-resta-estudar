@@ -24,19 +24,17 @@ Quanto mais forte o modelo, mais "intuitivo" o comportamento — mas mais custos
 
 ### Espectro de Consistência
 
-```
-Mais Forte ◄──────────────────────────────────────────► Mais Fraco
-
-┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
-│ Lineariz-    │  Sequential  │   Causal     │  Read-your-  │  Eventual    │
-│  ability     │  Consistency │  Consistency │   writes     │  Consistency │
-│              │              │              │              │              │
-│ "Uma cópia"  │ "Ordem       │ "Causa e     │ "Você vê     │ "Eventualm-  │
-│              │  global"     │  efeito"     │  suas        │  ente         │
-│              │              │              │  escritas"   │  converge"   │
-└──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-  ▲ Latência alta                                         ▲ Latência baixa
-  ▲ Disponibilidade baixa                                 ▲ Disponibilidade alta
+```mermaid
+flowchart LR
+    A["Linearizability<br>Uma cópia<br>↑ Latência<br>↓ Disponibilidade"] --> B["Sequential Consistency<br>Ordem global"]
+    B --> C["Causal Consistency<br>Causa e efeito"]
+    C --> D["Read-your-writes<br>Você vê suas escritas"]
+    D --> E["Eventual Consistency<br>Eventualmente converge<br>↓ Latência<br>↑ Disponibilidade"]
+    
+    classDef strong fill:#f96,stroke:#333,stroke-width:2px;
+    classDef weak fill:#9f6,stroke:#333,stroke-width:2px;
+    class A,B strong
+    class D,E weak
 ```
 
 ---
@@ -54,12 +52,17 @@ O modelo **mais forte**. Toda operação parece ocorrer **instantaneamente** em 
 
 **Onde é usado**: etcd, ZooKeeper, CockroachDB, Spanner (Google).
 
-```
-Tempo real →
-
-Cliente A:  |---Write(x=1)---|
-Cliente B:                        |---Read(x)---| → deve retornar 1
-                                                     (a escrita já completou)
+```mermaid
+sequenceDiagram
+    participant A as Cliente A
+    participant S as Sistema
+    participant B as Cliente B
+    
+    A->>S: Write(x=1)
+    S-->>A: OK
+    Note over A,B: Tempo real avança
+    B->>S: Read(x)
+    S-->>B: Retorna 1 (a escrita já completou)
 ```
 
 ### 2. Sequential Consistency
@@ -116,9 +119,11 @@ O modelo **mais relaxado**. Se nenhuma nova escrita for feita, **eventualmente**
 ### Como Garantir Linearizability
 
 **Abordagem 1: Leader-based replication com leitura no líder**
-```
-Escrita → Líder → Replica síncrona → Followers
-Leitura → Sempre do Líder (ou de Follower com lease)
+```mermaid
+flowchart LR
+    C[Cliente] -->|Escrita| L[Líder]
+    L -->|Replica síncrona| F[Followers]
+    C2[Cliente] -->|Leitura| L
 ```
 
 **Abordagem 2: Quorum reads/writes**

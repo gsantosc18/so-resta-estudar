@@ -28,51 +28,48 @@ Em sistemas CRUD tradicionais, o mesmo modelo é usado para leitura e escrita. I
 
 Separar completamente o **modelo de escrita (Command)** do **modelo de leitura (Query)**.
 
-```
-                    ┌──────────────────┐
-                    │   API Gateway     │
-                    └────────┬─────────┘
-                             │
-              ┌──────────────┴──────────────┐
-              │                             │
-     ┌────────▼────────┐          ┌────────▼────────┐
-     │  Command Side   │          │   Query Side     │
-     │  (Write Model)  │          │  (Read Model)    │
-     │                 │          │                  │
-     │ - Validações    │  eventos │ - Denormalizado  │
-     │ - Business rules│─────────►│ - Otimizado para │
-     │ - Normalizado   │          │   leitura        │
-     │                 │          │ - Materialized   │
-     │  [PostgreSQL]   │          │   views          │
-     └─────────────────┘          │                  │
-                                  │ [Elasticsearch]  │
-                                  │ [Redis]          │
-                                  │ [MongoDB]        │
-                                  └──────────────────┘
+```mermaid
+flowchart TD
+    AG[API Gateway]
+    
+    subgraph Command Side [Write Model]
+        CS[Validações<br>Business rules<br>Normalizado]
+        DB_W[(PostgreSQL)]
+        CS --> DB_W
+    end
+    
+    subgraph Query Side [Read Model]
+        QS[Denormalizado<br>Otimizado leitura<br>Materialized views]
+        DB_R[(Elastic / Redis / Mongo)]
+        QS --> DB_R
+    end
+    
+    AG --> CS
+    AG --> QS
+    DB_W -->|eventos| DB_R
 ```
 
 ### CQRS sem Event Sourcing
 
 CQRS **não exige** Event Sourcing. A forma mais simples:
 
-```
-Write: PostgreSQL (normalizado) → publica evento → 
-Read:  Elasticsearch/Redis (denormalizado, atualizado via eventos)
+```mermaid
+flowchart LR
+    W[(PostgreSQL<br>normalizado)] -->|publica evento| R[("Elasticsearch/Redis<br>denormalizado")]
 ```
 
 ### CQRS com Event Sourcing
 
 A combinação mais poderosa (e complexa):
 
-```
-Command → Aggregate → Event Store (append-only)
-                          │
-                     Projections
-                          │
-              ┌───────────┼───────────┐
-              ▼           ▼           ▼
-          [Read DB 1] [Read DB 2] [Read DB 3]
-          (por user)  (por data)  (search)
+```mermaid
+flowchart TD
+    C[Command] --> A[Aggregate]
+    A --> ES[(Event Store<br>append-only)]
+    
+    ES -->|Projections| R1[(Read DB 1<br>por user)]
+    ES -->|Projections| R2[(Read DB 2<br>por data)]
+    ES -->|Projections| R3[(Read DB 3<br>search)]
 ```
 
 ---

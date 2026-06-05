@@ -40,11 +40,12 @@ Compreender tipos de métricas (counters, gauges, histograms), os 4 Golden Signa
 
 ### Prometheus + Grafana
 
-```
-App ──metrics──► Prometheus (scrape a cada 15s) ──queries──► Grafana (dashboards)
-                      │
-                      ▼
-               AlertManager ──► PagerDuty / Slack
+```mermaid
+flowchart LR
+    A[App] -->|metrics| P["Prometheus<br>(scrape a cada 15s)"]
+    P -->|queries| G["Grafana<br>(dashboards)"]
+    P --> AM[AlertManager]
+    AM --> PD["PagerDuty / Slack"]
 ```
 
 **Prometheus**: Time-series database que scrapes endpoints `/metrics` dos serviços.

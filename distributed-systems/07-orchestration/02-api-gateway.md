@@ -15,12 +15,18 @@ Compreender o papel do API Gateway como ponto de entrada único para microservi�
 
 Ponto de entrada **único** para clientes, que roteia requests para microserviços internos.
 
-```
-                         ┌────────────────┐
-Mobile App  ─────────►   │                │  ──► Order Service
-Web App     ─────────►   │  API Gateway   │  ──► User Service
-3rd Party   ─────────►   │                │  ──► Payment Service
-                         └────────────────┘  ──► Product Service
+```mermaid
+flowchart LR
+    MA[Mobile App] --> AG
+    WA[Web App] --> AG
+    TP[3rd Party] --> AG
+    
+    AG[API Gateway]
+    
+    AG --> OS[Order Service]
+    AG --> US[User Service]
+    AG --> PS[Payment Service]
+    AG --> PrS[Product Service]
 ```
 
 ### Funcionalidades
@@ -40,10 +46,15 @@ Web App     ─────────►   │  API Gateway   │  ──► U
 
 Em vez de um único gateway, criar um gateway **por tipo de cliente**:
 
-```
-Mobile App  ──► Mobile BFF  ──► Microserviços
-Web App     ──► Web BFF     ──► Microserviços
-Admin Panel ──► Admin BFF   ──► Microserviços
+```mermaid
+flowchart LR
+    MA[Mobile App] --> MB[Mobile BFF]
+    WA[Web App] --> WB[Web BFF]
+    AP[Admin Panel] --> AB[Admin BFF]
+    
+    MB --> MS[Microserviços]
+    WB --> MS
+    AB --> MS
 ```
 Cada BFF otimiza payload e endpoints para seu cliente.
 

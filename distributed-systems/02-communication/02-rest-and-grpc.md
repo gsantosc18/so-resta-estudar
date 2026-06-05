@@ -117,42 +117,70 @@ Protobuf (gRPC):
 
 ### HTTP/2 vs HTTP/1.1
 
-```
-HTTP/1.1 (REST típico):
-  Conexão 1: GET /users/1  → resposta → GET /users/2 → resposta (sequencial)
-  Conexão 2: GET /users/3  → resposta → GET /users/4 → resposta
-  (Head-of-line blocking por conexão)
+```mermaid
+sequenceDiagram
+    participant C1 as Cliente (HTTP/1.1)
+    participant S1 as Servidor
+    
+    Note over C1,S1: Conexão 1 (Sequencial)
+    C1->>S1: GET /users/1
+    S1-->>C1: resposta 1
+    C1->>S1: GET /users/2
+    S1-->>C1: resposta 2
+    
+    Note over C1,S1: Conexão 2 (Sequencial)
+    C1->>S1: GET /users/3
+    S1-->>C1: resposta 3
+    C1->>S1: GET /users/4
+    S1-->>C1: resposta 4
 
-HTTP/2 (gRPC):
-  Conexão 1: Stream 1: GET /users/1  ─────────────────────→ resposta
-             Stream 2: GET /users/2  ─────────────────────→ resposta
-             Stream 3: GET /users/3  ─────────────────────→ resposta
-  (Multiplexação: múltiplos requests na mesma conexão, sem blocking)
+    participant C2 as Cliente (HTTP/2)
+    participant S2 as Servidor
+    
+    Note over C2,S2: Conexão Única (Multiplexada)
+    par Stream 1
+        C2->>S2: GET /users/1
+        S2-->>C2: resposta 1
+    and Stream 2
+        C2->>S2: GET /users/2
+        S2-->>C2: resposta 2
+    and Stream 3
+        C2->>S2: GET /users/3
+        S2-->>C2: resposta 3
+    end
 ```
 
 ### Modos de Streaming gRPC
 
-```
-1. Unary (como REST):
-   Cliente ──request──► Server
-   Cliente ◄──response── Server
-
-2. Server Streaming:
-   Cliente ──request──► Server
-   Cliente ◄──response 1── Server
-   Cliente ◄──response 2── Server
-   Cliente ◄──response N── Server
-
-3. Client Streaming:
-   Cliente ──request 1──► Server
-   Cliente ──request 2──► Server
-   Cliente ──request N──► Server
-   Cliente ◄──response──── Server
-
-4. Bidirectional Streaming:
-   Cliente ──request 1──►  ◄──response 1── Server
-   Cliente ──request 2──►  ◄──response 2── Server
-   (full-duplex)
+```mermaid
+sequenceDiagram
+    participant C as Cliente
+    participant S as Server
+    
+    Note over C,S: 1. Unary
+    C->>S: request
+    S-->>C: response
+    
+    Note over C,S: 2. Server Streaming
+    C->>S: request
+    S-->>C: response 1
+    S-->>C: response 2
+    S-->>C: response N
+    
+    Note over C,S: 3. Client Streaming
+    C->>S: request 1
+    C->>S: request 2
+    C->>S: request N
+    S-->>C: response
+    
+    Note over C,S: 4. Bidirectional Streaming
+    par Duplex
+        C->>S: request 1
+        S-->>C: response 1
+    and Duplex
+        C->>S: request 2
+        S-->>C: response 2
+    end
 ```
 
 ---

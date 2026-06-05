@@ -36,32 +36,41 @@ Kubernetes (K8s), criado pelo Google (baseado no Borg), é o orquestrador de con
 
 ### Arquitetura
 
-```
-┌─────────────────────────────────────────────────────┐
-│                   Control Plane                      │
-│                                                     │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────┐  │
-│  │ API      │  │ etcd     │  │ Controller       │  │
-│  │ Server   │  │ (state)  │  │ Manager          │  │
-│  └──────────┘  └──────────┘  └──────────────────┘  │
-│  ┌──────────┐  ┌──────────────────────────────────┐ │
-│  │Scheduler │  │ Cloud Controller Manager         │ │
-│  └──────────┘  └──────────────────────────────────┘ │
-└─────────────────────────┬───────────────────────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-┌───────▼───────┐ ┌───────▼───────┐ ┌───────▼───────┐
-│   Worker Node │ │   Worker Node │ │   Worker Node │
-│               │ │               │ │               │
-│ ┌───────────┐ │ │ ┌───────────┐ │ │ ┌───────────┐ │
-│ │  kubelet  │ │ │ │  kubelet  │ │ │ │  kubelet  │ │
-│ │ kube-proxy│ │ │ │ kube-proxy│ │ │ │ kube-proxy│ │
-│ │           │ │ │ │           │ │ │ │           │ │
-│ │ [Pod A]   │ │ │ │ [Pod C]   │ │ │ │ [Pod E]   │ │
-│ │ [Pod B]   │ │ │ │ [Pod D]   │ │ │ │ [Pod F]   │ │
-│ └───────────┘ │ │ └───────────┘ │ │ └───────────┘ │
-└───────────────┘ └───────────────┘ └───────────────┘
+```mermaid
+flowchart TD
+    subgraph ControlPlane [Control Plane]
+        API[API Server]
+        ETCD[(etcd)]
+        CM[Controller Manager]
+        SCH[Scheduler]
+        CCM[Cloud Controller Manager]
+    end
+    
+    API <--> ETCD
+    API <--> CM
+    API <--> SCH
+    
+    subgraph WN1 [Worker Node 1]
+        K1[kubelet / kube-proxy]
+        P1[Pod A / Pod B]
+        K1 --- P1
+    end
+    
+    subgraph WN2 [Worker Node 2]
+        K2[kubelet / kube-proxy]
+        P2[Pod C / Pod D]
+        K2 --- P2
+    end
+    
+    subgraph WN3 [Worker Node 3]
+        K3[kubelet / kube-proxy]
+        P3[Pod E / Pod F]
+        K3 --- P3
+    end
+    
+    API <--> K1
+    API <--> K2
+    API <--> K3
 ```
 
 ### Componentes do Control Plane
@@ -182,18 +191,12 @@ spec:
 
 Kubernetes funciona por **declarative state management**. Você declara o estado desejado, e controllers trabalham continuamente para alcançá-lo.
 
-```
-Estado Desejado (YAML):   replicas: 3
-Estado Atual:             pods rodando: 2
-
-Controller detecta diferença → cria 1 pod → estado converge para 3
-```
-
-```
-Loop infinito do Controller:
-  1. Observe: ler estado atual do cluster
-  2. Diff: comparar com estado desejado
-  3. Act: criar/deletar/atualizar recursos para convergir
+```mermaid
+stateDiagram-v2
+    [*] --> Observe
+    Observe --> Diff: ler estado atual
+    Diff --> Act: comparar com estado desejado
+    Act --> Observe: cria/atualiza/deleta recursos
 ```
 
 ### Rolling Update
@@ -220,18 +223,21 @@ Se v2 falha readiness → rollback automático
 
 ### Networking
 
-```
-Pod-to-Pod:
-  Cada pod tem IP único no cluster
-  Pods se comunicam diretamente (sem NAT)
-
-Pod-to-Service:
-  Service tem ClusterIP virtual
-  kube-proxy configura iptables/IPVS para L4 load balancing
-
-External-to-Service:
-  Ingress Controller (Nginx, Traefik) → Service → Pods
-  LoadBalancer Service → Cloud LB → Service → Pods
+```mermaid
+flowchart TD
+    subgraph External-to-Service
+        Ext[Tráfego Externo] --> IC[Ingress Controller / LoadBalancer]
+        IC --> S[Service ClusterIP]
+    end
+    
+    subgraph Pod-to-Service
+        S -->|kube-proxy<br>L4 LB| P1[Pod 1]
+        S -->|kube-proxy<br>L4 LB| P2[Pod 2]
+    end
+    
+    subgraph Pod-to-Pod
+        P1 <-->|IP Direto| P2
+    end
 ```
 
 ---

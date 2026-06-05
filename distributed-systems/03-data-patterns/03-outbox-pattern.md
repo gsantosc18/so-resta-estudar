@@ -38,14 +38,19 @@ Cenários de falha:
 
 Salvar o evento em uma **tabela outbox** na mesma transação do banco. Um processo separado lê a outbox e publica no broker.
 
-```
-┌─ Transação ACID ──────────────────────┐
-│  1. INSERT INTO orders (...)          │
-│  2. INSERT INTO outbox (event_data)   │
-└───────────────────────────────────────┘
-        │
-        ▼ (processo separado)
-  Outbox Reader → Lê eventos pendentes → Publica no Broker → Marca como enviado
+```mermaid
+flowchart TD
+    subgraph Transação ACID
+        O[1. INSERT INTO orders]
+        OB[2. INSERT INTO outbox]
+    end
+    
+    OR[Outbox Reader]
+    B[(Broker)]
+    
+    OB -->|Lê pendentes| OR
+    OR -->|Publica| B
+    OR -->|Marca como enviado| OB
 ```
 
 **Garantia**: Se a transação commitou, o evento está na outbox. Se não commitou, nenhum dos dois existe. **Atomicidade garantida**.
@@ -69,10 +74,11 @@ UPDATE outbox SET published = true WHERE id IN (...);
 #### 2. Change Data Capture (CDC)
 Ferramentas como **Debezium** capturam mudanças diretamente do transaction log (WAL) do banco.
 
-```
-PostgreSQL WAL → Debezium → Kafka
-
-Banco: INSERT INTO outbox → WAL registra → Debezium detecta → Publica no Kafka
+```mermaid
+flowchart LR
+    DB[(Banco<br>INSERT outbox)] --> WAL[WAL registra]
+    WAL --> DBZ[Debezium detecta]
+    DBZ --> K[(Kafka<br>Publica)]
 ```
 
 **Vantagens**: Latência muito baixa (~ms), sem polling no banco.

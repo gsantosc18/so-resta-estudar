@@ -89,8 +89,9 @@ Gerenciando o ciclo de vida de serviços em produção.
 1. **Siga a ordem das fases** — cada fase constrói sobre a anterior.
 2. **Não pule os fundamentos** — eles aparecem em todas as entrevistas senior/staff.
 3. **Implemente os projetos práticos** — ler sem implementar é memorizar sem aprender.
-4. **Use o glossário** — termos técnicos são o vocabulário mínimo para discussões arquiteturais.
-5. **Acompanhe no progress.md** — marque o que já estudou e revise periodicamente.
+4. **Use o [glossário](glossary.md)** — termos técnicos são o vocabulário mínimo para discussões arquiteturais.
+5. **Acompanhe no [progress.md](progress.md)** — marque o que já estudou e revise periodicamente.
+6. **Consulte o [roadmap](roadmap.md)** — veja a ordem de estudo e dependências entre tópicos.
 
 ---
 

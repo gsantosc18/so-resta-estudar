@@ -9,10 +9,12 @@ Repositório dedicado ao estudo progressivo e aprofundado de **qualquer área do
 ```
 ├── AGENTS.md              # Regras e convenções do agente de pesquisa
 ├── README.md              # Este arquivo
-├── roadmap.md             # Índice global de todos os assuntos
-├── progress.md            # Progresso de estudo por tópico
-├── glossary.md            # Glossário de termos por área de conhecimento
 ├── distributed-systems/   # Sistemas Distribuídos
+│   ├── README.md          # Introdução e roadmap integrado
+│   ├── roadmap.md         # Roadmap do assunto
+│   ├── progress.md        # Progresso de estudo
+│   ├── glossary.md        # Glossário de termos
+│   └── ...                # Módulos e tópicos
 └── ...                    # Novos assuntos serão adicionados aqui
 ```
 
@@ -24,10 +26,9 @@ Repositório dedicado ao estudo progressivo e aprofundado de **qualquer área do
 
 ## Como Navegar
 
-- Consulte o [roadmap.md](roadmap.md) para a visão geral e ordem de estudo recomendada.
-- Acompanhe seu progresso em [progress.md](progress.md).
-- Consulte o [glossary.md](glossary.md) para termos e definições.
-- Cada assunto possui um `README.md` próprio com o roadmap integrado do tema.
+- Acesse a pasta de cada assunto para encontrar o `roadmap.md`, `progress.md` e `glossary.md` específicos.
+- Cada assunto possui um `README.md` próprio com introdução e roadmap integrado.
+- Exemplo: [Roadmap de Sistemas Distribuídos](distributed-systems/roadmap.md) · [Progresso](distributed-systems/progress.md) · [Glossário](distributed-systems/glossary.md)
 
 ## Convenções
 

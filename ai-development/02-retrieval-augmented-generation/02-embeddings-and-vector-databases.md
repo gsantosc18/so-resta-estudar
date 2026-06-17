@@ -22,9 +22,9 @@ Para saber quão semelhantes são dois textos em um banco vetorial, calculamos a
 ```mermaid
 classDiagram
     class MetricasSimilaridade {
-        +CosineSimilarity(A, B) -> Direção relativa
-        +DotProduct(A, B) -> Direção e Magnitude
-        +EuclideanDistanceL2(A, B) -> Distância física entre pontos
+        +CosineSimilarity(a, b)
+        +DotProduct(a, b)
+        +EuclideanDistanceL2(a, b)
     }
 ```
 

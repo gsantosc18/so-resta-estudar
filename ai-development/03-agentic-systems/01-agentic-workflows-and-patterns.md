@@ -34,13 +34,13 @@ O fluxo do padrão **Reflection** aplicado à geração e validação automátic
 
 ```mermaid
 flowchart TD
-    A[Instrução do Usuário] --> B[Agente Programador: Gerar Código]
-    B --> C[Código Gerado]
-    C --> D[Ambiente de Teste Sandbox: Rodar Testes Automatizados]
-    D --> E{Os testes passaram?}
-    E -- Sim --> F[Retornar Código ao Usuário]
-    E -- Não --> G[Agente Revisor: Analisar Código + Mensagem de Erro]
-    G --> H[Proposta de Correção]
+    A["Instrução do Usuário"] --> B["Agente Programador: Gerar Código"]
+    B --> C["Código Gerado"]
+    C --> D["Ambiente de Teste Sandbox: Rodar Testes Automatizados"]
+    D --> E{"Os testes passaram?"}
+    E -- Sim --> F["Retornar Código ao Usuário"]
+    E -- Não --> G["Agente Revisor: Analisar Código e Erros"]
+    G --> H["Proposta de Correção"]
     H --> B
 ```
 

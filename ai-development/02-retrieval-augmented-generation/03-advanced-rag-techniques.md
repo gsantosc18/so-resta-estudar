@@ -37,19 +37,19 @@ O pipeline de um fluxo RAG Avançado com pré-processamento, recuperação combi
 
 ```mermaid
 flowchart TD
-    A[Pergunta do Usuário] --> B[LLM: Query Rewriting / Expansion]
-    B --> C[Consultas Otimizadas]
-    C --> D[Busca Semântica Densa - Banco Vetorial]
-    C --> E[Busca por Palavra-Chave Esparsa - BM25]
-    D --> F[Resultados Densos]
-    E --> G[Resultados Esparsos]
-    F --> H[Reciprocal Rank Fusion - RRF]
+    A["Pergunta do Usuário"] --> B["LLM: Query Rewriting / Expansion"]
+    B --> C["Consultas Otimizadas"]
+    C --> D["Busca Semântica Densa - Banco Vetorial"]
+    C --> E["Busca por Palavra-Chave Esparsa - BM25"]
+    D --> F["Resultados Densos"]
+    E --> G["Resultados Esparsos"]
+    F --> H["Reciprocal Rank Fusion - RRF"]
     G --> H
-    H --> I[Documentos Combinados Top-N]
-    I --> J[Modelo Reranker - Cross-Encoder]
-    J --> K[Documentos Reordenados Filtrados Top-K]
-    K --> L[LLM de Geração Final]
-    L --> M[Resposta Embasada e Precisa]
+    H --> I["Documentos Combinados Top-N"]
+    I --> J["Modelo Reranker - Cross-Encoder"]
+    J --> K["Documentos Reordenados Filtrados Top-K"]
+    K --> L["LLM de Geração Final"]
+    L --> M["Resposta Embasada e Precisa"]
 ```
 
 ---

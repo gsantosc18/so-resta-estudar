@@ -31,15 +31,15 @@ O fluxo de telemetria assíncrona executado pela aplicação para coletar dados 
 
 ```mermaid
 flowchart TD
-    A[Usuário faz requisição] --> B[Aplicação cria Trace ID]
-    B --> C[Executa Ingestão/RAG]
-    C --> D[Cria Span RAG]
-    D --> E[Chama API do LLM]
-    E --> F[Cria Span LLM]
-    F --> G[Envia resposta final ao Usuário]
-    G --> H[SDK de Telemetria envia pacotes de Spans em Background via HTTP/gRPC]
-    H --> I[Servidor de Observabilidade Langfuse / LangSmith]
-    I --> J[Dashboard de Auditoria: Custos, Latências e Traces]
+    A["Usuário faz requisição"] --> B["Aplicação cria Trace ID"]
+    B --> C["Executa Ingestão/RAG"]
+    C --> D["Cria Span RAG"]
+    D --> E["Chama API do LLM"]
+    E --> F["Cria Span LLM"]
+    F --> G["Envia resposta final ao Usuário"]
+    G --> H["SDK de Telemetria envia pacotes de Spans em Background via HTTP/gRPC"]
+    H --> I["Servidor de Observabilidade (Langfuse / LangSmith)"]
+    I --> J["Dashboard de Auditoria: Custos, Latências e Traces"]
 ```
 
 ---

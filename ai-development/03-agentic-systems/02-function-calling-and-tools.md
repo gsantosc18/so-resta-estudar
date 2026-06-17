@@ -19,18 +19,18 @@ O fluxo de mensagens e estados do Function Calling é executado da seguinte form
 ```mermaid
 sequenceDiagram
     autonumber
-    participant App as Aplicação (Cliente)
-    participant LLM as API do LLM
-    participant API as API Externa (Clima/Banco)
+    participant App as "Aplicação (Cliente)"
+    participant LLM as "API do LLM"
+    participant API as "API Externa (Clima/Banco)"
 
-    App->>LLM: Prompt + Declaração das Ferramentas (Schemas JSON)
-    LLM->>LLM: Analisa prompt e decide se precisa de ferramentas
+    App->>LLM: Envia Prompt e Schemas de Ferramentas
+    LLM->>LLM: Analisa se precisa de ferramentas
     alt Precisa de Ferramenta
-        LLM-->>App: Retorna Tool Call (Nome da Função + Argumentos JSON)
-        App->>API: Chama API local com os Argumentos gerados
-        API-->>App: Retorna Resultado da Execução (Ex: 22°C, Nublado)
-        App->>LLM: Envia Resultado da Ferramenta de volta
-        LLM-->>App: Retorna Resposta Final em Linguagem Natural
+        LLM-->>App: Retorna Chamada de Função e Argumentos
+        App->>API: Executa API local com argumentos
+        API-->>App: Retorna Resultado da Execução
+        App->>LLM: Envia Resultado de volta
+        LLM-->>App: Retorna Resposta Final
     else Não precisa de Ferramenta
         LLM-->>App: Retorna Resposta Direta
     end

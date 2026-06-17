@@ -26,12 +26,12 @@ Consiste em utilizar um modelo de linguagem avançado e robusto (ex. GPT-4o ou G
 
 ```mermaid
 flowchart TD
-    A[Pergunta do Usuário] --> E[LLM Juiz]
-    B[Contexto Recuperado] --> E
-    C[Resposta do Sistema] --> E
-    D[Instruções do Gabarito / Rubrica] --> E
-    E --> F[Pontuação Qualitativa / Justificativa]
-    E --> G[Score Quantitativo]
+    A["Pergunta do Usuário"] --> E["LLM Juiz"]
+    B["Contexto Recuperado"] --> E
+    C["Resposta do Sistema"] --> E
+    D["Instruções do Gabarito / Rubrica"] --> E
+    E --> F["Pontuação Qualitativa / Justificativa"]
+    E --> G["Score Quantitativo"]
 ```
 
 ---

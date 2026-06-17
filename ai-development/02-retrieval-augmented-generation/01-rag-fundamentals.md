@@ -27,22 +27,22 @@ O fluxo dinâmico em tempo de execução de um sistema RAG é ilustrado a seguir
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as Usuário
-    participant App as Aplicação (Orquestrador)
-    participant DB as Banco de Dados Vetorial
-    participant LLM as Modelo de Linguagem (LLM)
+    actor User as "Usuário"
+    participant App as "Aplicação (Orquestrador)"
+    participant DB as "Banco de Dados Vetorial"
+    participant LLM as "Modelo de Linguagem (LLM)"
 
-    User->>App: Envia pergunta ("Como cancelo minha conta?")
+    User->>App: Envia pergunta (ex. Como cancelo minha conta?)
     rect rgb(200, 220, 240)
         note right of App: Etapa de Recuperação (Retrieval)
         App->>DB: Busca chunks mais semelhantes à pergunta
-        DB-->>App: Retorna trechos relevantes (ex. cláusula 4 do contrato)
+        DB-->>App: Retorna trechos de documentos relevantes
     end
     rect rgb(220, 240, 220)
         note right of App: Etapa de Geração (Generation)
-        App->>App: Monta o prompt (Prompt = Instruções + Trechos + Pergunta)
-        App->>LLM: Envia Prompt Consolidado
-        LLM-->>App: Retorna Resposta Embasada ("Para cancelar, envie um email...")
+        App->>App: Monta prompt consolidado com contexto
+        App->>LLM: Envia Prompt com Instruções e Contexto
+        LLM-->>App: Retorna Resposta Embasada
     end
     App->>User: Exibe resposta final ao usuário
 ```

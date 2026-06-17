@@ -23,6 +23,7 @@ Repositório dedicado ao estudo progressivo e aprofundado de **qualquer área do
 | Assunto | Área | Descrição |
 |---------|------|-----------|
 | [Sistemas Distribuídos](distributed-systems/README.md) | Tecnologia | Fundamentos, comunicação, padrões de dados, resiliência, escalabilidade, observabilidade e orquestração |
+| [Desenvolvimento com IA](ai-development/README.md) | Tecnologia | Fundamentos de LLMs, engenharia de prompts, sistemas de RAG, fluxos agênticos e práticas de LLMOps |
 | [Inglês (A1 a B2)](english/README.md) | Idiomas | Base de conhecimento para o estudo progressivo do idioma inglês, cobrindo regras, vocabulário e estruturas desde o nível A1 até B2. |
 
 ## Como Navegar

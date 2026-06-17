@@ -40,7 +40,7 @@ flowchart TD
     E --> F[Distribuição de Probabilidades para Próximo Token]
     F --> G[Amostragem com Temperatura / Top-P]
     G --> H[Próximo Token Selecionado]
-    H --> I{É o Token de Fim de Texto <|endoftext|>?}
+    H --> I{"É o Token de Fim de Texto <|endoftext|>?"}
     I -- Não --> J[Adicionar token ao contexto e repetir]
     J --> E
     I -- Sim --> K[Texto Final Renderizado]

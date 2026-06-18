@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+
+# Python virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# MkDocs temporary files and folders
+/docs/
+/site/

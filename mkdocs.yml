@@ -1,0 +1,49 @@
+site_name: Só Resta Estudar
+site_description: Repositório de estudos e aprendizados estruturados
+site_author: Gedalias Caldas
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    # Configuração de tema claro e escuro automático
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+  features:
+    - navigation.tabs          # Abas no topo para navegar entre os assuntos principais
+    - navigation.sections      # Permite agrupar subpastas em seções
+    - navigation.indexes       # Permite que cliques em pastas abram o README.md interno
+    - search.suggest           # Sugestões rápidas de busca
+    - search.highlight         # Destacar palavras buscadas
+    - content.code.copy        # Botão para copiar blocos de código
+
+# Extensões Markdown suportadas
+markdown_extensions:
+  - admonition                # Permite usar caixas de notas/alertas
+  - pymdownx.details          # Suporte a blocos colapsáveis (details)
+  - pymdownx.superfences:     # Suporte a diagramas Mermaid.js e códigos aninhados
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:       # Sintaxe colorida de código
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables                    # Suporte avançado a tabelas

@@ -1,0 +1,43 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name github-actions[bot]
+          git config --global user.email github-actions[bot]@users.noreply.github.com
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material
+
+      - name: Prepare docs directory
+        run: |
+          mkdir -p docs
+          cp README.md docs/index.md
+          for dir in */; do
+            dir=${dir%/}
+            if [ "$dir" != "docs" ] && [ "$dir" != "site" ]; then
+              cp -r "$dir" docs/
+            fi
+          done
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force

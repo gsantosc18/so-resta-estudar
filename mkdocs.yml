@@ -47,3 +47,12 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - tables                    # Suporte avançado a tabelas
+
+# Configurações de Scripts e Estilos adicionais
+extra_javascript:
+  - https://unpkg.com/@panzoom/panzoom@4.6.2/dist/panzoom.min.js
+  - assets/javascripts/mermaid-zoom.js
+
+extra_css:
+  - assets/stylesheets/mermaid-zoom.css
+

@@ -1,48 +1,21 @@
-# Progresso de Estudos — Desenvolvimento com IA
-
-## Legenda
-
-| Símbolo | Significado |
-|---------|------------|
-| ⬜ | Não iniciado |
-| 🟡 | Em progresso |
-| ✅ | Concluído |
-| 🔄 | Revisão necessária |
-
----
+# Progresso de Estudo — Desenvolvimento com IA
 
 ## Fase 1 — Introdução aos LLMs
-
-| Status | Tópico | Início | Conclusão | Notas |
-|--------|--------|--------|-----------|-------|
-| ⬜ | O que são LLMs? | - | - | - |
-| ⬜ | Engenharia de Prompts | - | - | - |
-
----
+- [x] 1.1 O que são LLMs?
+- [x] 1.2 Engenharia de Prompts
+- [x] 1.3 Spec-Driven Development e SPDD
 
 ## Fase 2 — Recuperação Aumentada de Geração (RAG)
-
-| Status | Tópico | Início | Conclusão | Notas |
-|--------|--------|--------|-----------|-------|
-| ⬜ | Fundamentos de RAG | - | - | - |
-| ⬜ | Embeddings e Bancos Vetoriais | - | - | - |
-| ⬜ | Técnicas de RAG Avançado | - | - | - |
-
----
+- [x] 2.1 Fundamentos de RAG
+- [x] 2.2 Embeddings e Bancos Vetoriais
+- [x] 2.3 Técnicas de RAG Avançado
+- [x] 2.4 Avaliação e Segurança em RAG
 
 ## Fase 3 — Sistemas Agênticos
-
-| Status | Tópico | Início | Conclusão | Notas |
-|--------|--------|--------|-----------|-------|
-| ⬜ | Padrões e Fluxos Agênticos | - | - | - |
-| ⬜ | Function Calling e Ferramentas | - | - | - |
-| ⬜ | Frameworks Agênticos | - | - | - |
-
----
+- [x] 3.1 Padrões e Fluxos Agênticos
+- [x] 3.2 Function Calling e Ferramentas
+- [x] 3.3 Frameworks Agênticos
 
 ## Fase 4 — LLMOps e Avaliação
-
-| Status | Tópico | Início | Conclusão | Notas |
-|--------|--------|--------|-----------|-------|
-| ⬜ | Avaliação e Testes de LLMs | - | - | - |
-| ⬜ | Observabilidade e Monitoramento | - | - | - |
+- [ ] 4.1 Avaliação e Testes de LLMs
+- [ ] 4.2 Observabilidade e Monitoramento

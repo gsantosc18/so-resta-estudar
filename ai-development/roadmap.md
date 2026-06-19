@@ -34,6 +34,7 @@ Fase 1: Introdução aos LLMs
 |-------|--------|---------|---------------|
 | 1.1 | O que são LLMs? | [01-what-are-llms.md](01-introduction-to-llms/01-what-are-llms.md) | Nenhum |
 | 1.2 | Engenharia de Prompts | [02-prompt-engineering.md](01-introduction-to-llms/02-prompt-engineering.md) | 1.1 |
+| 1.3 | Spec-Driven Development e SPDD | [03-spec-driven-development-and-spdd.md](01-introduction-to-llms/03-spec-driven-development-and-spdd.md) | 1.2 |
 
 **Tempo estimado**: 1-2 semanas
 
@@ -48,6 +49,7 @@ Fase 1: Introdução aos LLMs
 | 2.1 | Fundamentos de RAG | [01-rag-fundamentals.md](02-retrieval-augmented-generation/01-rag-fundamentals.md) | 1.2 |
 | 2.2 | Embeddings e Bancos Vetoriais | [02-embeddings-and-vector-databases.md](02-retrieval-augmented-generation/02-embeddings-and-vector-databases.md) | 2.1 |
 | 2.3 | Técnicas de RAG Avançado | [03-advanced-rag-techniques.md](02-retrieval-augmented-generation/03-advanced-rag-techniques.md) | 2.2 |
+| 2.4 | Avaliação e Segurança em RAG | [04-rag-evaluation-and-security.md](02-retrieval-augmented-generation/04-rag-evaluation-and-security.md) | 2.3 |
 
 **Tempo estimado**: 2-3 semanas
 

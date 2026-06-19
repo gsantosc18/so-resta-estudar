@@ -223,6 +223,7 @@ if __name__ == "__main__":
     resp_erro = executar_pipeline_agente("Consulte o limite da conta 1099.")
     print(f"Resposta Final: {resp_erro}")
 
+```
 ---
 
 ## Perguntas de Entrevista

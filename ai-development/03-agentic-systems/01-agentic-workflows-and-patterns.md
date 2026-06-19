@@ -201,6 +201,7 @@ if __name__ == "__main__":
     agente = AgentePlanejador("Processar venda de kit teclado e mouse")
     agente.executar_plano()
 
+```
 ---
 
 ## Perguntas de Entrevista

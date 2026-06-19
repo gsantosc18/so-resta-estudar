@@ -259,6 +259,7 @@ if __name__ == "__main__":
     print("\n=== TESTE 2: Pergunta Fora do Escopo ===")
     print(pipeline_rag("Qual é a política de licença maternidade?"))
 
+```
 ---
 
 ## Perguntas de Entrevista

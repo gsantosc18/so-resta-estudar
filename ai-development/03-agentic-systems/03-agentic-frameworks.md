@@ -167,6 +167,7 @@ if __name__ == "__main__":
     # 2. Execução do estilo LangGraph
     rodar_grafo_langgraph()
 
+```
 ---
 
 ## Perguntas de Entrevista

@@ -149,6 +149,7 @@ if __name__ == "__main__":
     print(f"- Relevância do Contexto: {rel_b * 100:.1f}%")
     print("Nota: Fidelidade baixa indica alucinação de dados adicionais não presentes no contexto.")
 
+```
 ---
 
 ## Perguntas de Entrevista

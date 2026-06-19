@@ -208,6 +208,7 @@ if __name__ == "__main__":
     for score, doc in final_ranking:
         print(f"- Reranked Score: {score:.5f} | ID: {doc['id']} | {doc['texto']}")
 
+```
 ---
 
 ## Perguntas de Entrevista

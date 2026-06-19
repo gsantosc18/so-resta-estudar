@@ -243,6 +243,7 @@ if __name__ == "__main__":
     for score, doc in busca_l2:
         print(f"- Score L2 Relativo: {score:.4f} | Cat: {doc['metadado']['categoria']} | Texto: {doc['texto']}")
 
+```
 ---
 
 ## Perguntas de Entrevista

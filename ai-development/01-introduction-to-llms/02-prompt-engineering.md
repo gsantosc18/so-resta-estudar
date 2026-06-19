@@ -129,6 +129,7 @@ if __name__ == "__main__":
     print(f"Produto ID: {resultado.id_produto}")
     print(f"Sentimento: {resultado.sentimento}")
 
+```
 ---
 
 ## Perguntas de Entrevista

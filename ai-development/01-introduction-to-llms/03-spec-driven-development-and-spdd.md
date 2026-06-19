@@ -139,6 +139,7 @@ if __name__ == "__main__":
     sucesso, mensagem = testar_prompt_classificacao_lead()
     print(f"Status: {mensagem}")
 
+```
 ---
 
 ## Perguntas de Entrevista

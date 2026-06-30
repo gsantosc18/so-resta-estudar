@@ -19,6 +19,7 @@
 | ⬜ | Modelos de Consistência | - | - | - |
 | ⬜ | Consenso Distribuído | - | - | - |
 | ⬜ | Falácias da Computação Distribuída | - | - | - |
+| ⬜ | Locks Distribuídos | - | - | - |
 
 ## Fase 2 — Comunicação
 

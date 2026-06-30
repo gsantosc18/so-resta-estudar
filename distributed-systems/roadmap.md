@@ -40,6 +40,7 @@ Fase 1: Fundamentos
 | 1.2 | Modelos de Consistência | [02-consistency-models.md](01-foundations/02-consistency-models.md) | 1.1 |
 | 1.3 | Consenso Distribuído | [03-distributed-consensus.md](01-foundations/03-distributed-consensus.md) | 1.2 |
 | 1.4 | Falácias da Computação Distribuída | [04-fallacies-of-distributed-computing.md](01-foundations/04-fallacies-of-distributed-computing.md) | Nenhum |
+| 1.5 | Locks Distribuídos | [05-distributed-locks.md](01-foundations/05-distributed-locks.md) | 1.1, 1.2, 1.3 |
 
 **Tempo estimado**: 2-3 semanas
 

@@ -86,6 +86,10 @@ Padrão que separa as operações de leitura (Query) e escrita (Command) em mode
 Técnica de propagar o prazo máximo (deadline) de uma requisição através de toda a cadeia de serviços, garantindo que o timeout total seja respeitado.
 → Ver: [Timeout e Deadline Propagation](04-resilience/04-timeout-and-deadline-propagation.md)
 
+### Distributed Lock
+Mecanismo de exclusão mútua distribuído que garante que apenas um processo em todo o cluster acesse um recurso crítico por vez, contornando a ausência de memória compartilhada.
+→ Ver: [Locks Distribuídos](01-foundations/05-distributed-locks.md)
+
 ### Distributed Tracing
 Técnica para rastrear o fluxo de uma requisição através de múltiplos serviços, atribuindo um **trace ID** único a cada requisição.
 → Ver: [Distributed Tracing](06-observability/01-distributed-tracing.md)
@@ -121,6 +125,10 @@ Processo automático de transferir a carga de um componente falho para um compon
 ### Fan-out
 Padrão onde uma mensagem/evento é distribuída para múltiplos consumidores simultaneamente.
 → Ver: [Event-Driven Architecture](02-communication/04-event-driven-architecture.md)
+
+### Fencing Token
+Número sequencial estritamente crescente gerado na aquisição de um lock distribuído. Utilizado pelo recurso de destino (como um banco de dados) para rejeitar escritas atrasadas de locks que já expiraram.
+→ Ver: [Locks Distribuídos](01-foundations/05-distributed-locks.md)
 
 ---
 
@@ -169,6 +177,10 @@ Variação aleatória adicionada ao intervalo de retry para evitar que múltiplo
 ### Leader Election
 Processo pelo qual os nós de um cluster elegem um líder responsável por coordenar operações. Fundamental em algoritmos de consenso.
 → Ver: [Consenso Distribuído](01-foundations/03-distributed-consensus.md)
+
+### Lease
+Contrato de posse temporária de um recurso (como um lock) com expiração baseada em tempo (TTL), protegendo o sistema contra bloqueios permanentes caso o cliente sofra falha.
+→ Ver: [Locks Distribuídos](01-foundations/05-distributed-locks.md)
 
 ### Linearizability
 O modelo de consistência mais forte: toda operação parece ocorrer instantaneamente em algum ponto entre sua invocação e resposta. Equivalente a ter uma única cópia dos dados.
@@ -244,6 +256,10 @@ Algoritmo de consenso projetado para ser mais compreensível que o Paxos. Utiliz
 ### Rate Limiting
 Controle da taxa de requisições aceitas por um serviço em um período de tempo, protegendo contra sobrecarga e abuso.
 → Ver: [Rate Limiting](05-scalability/05-rate-limiting.md)
+
+### Redlock
+Algoritmo heurístico de lock distribuído proposto para o Redis, onde o cliente tenta adquirir locks em múltiplos nós master independentes para obter um quórum de posse.
+→ Ver: [Locks Distribuídos](01-foundations/05-distributed-locks.md)
 
 ### Replication
 Manutenção de cópias dos dados em múltiplos nós para disponibilidade e tolerância a falhas.

@@ -30,6 +30,7 @@ Os princípios teóricos que governam todo sistema distribuído. Sem eles, tudo 
 - [Modelos de Consistência](01-foundations/02-consistency-models.md)
 - [Consenso Distribuído](01-foundations/03-distributed-consensus.md)
 - [Falácias da Computação Distribuída](01-foundations/04-fallacies-of-distributed-computing.md)
+- [Locks Distribuídos](01-foundations/05-distributed-locks.md)
 
 ### [Fase 2 — Comunicação](02-communication/)
 Como serviços conversam entre si — e as consequências de cada escolha.

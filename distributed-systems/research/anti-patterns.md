@@ -22,7 +22,7 @@ Este documento reúne e cataloga os antipadrões comuns de arquitetura e desenvo
 ---
 
 ## 3. Confiança Cega em Relógios Físicos (Wall Clock Trust)
-* **O que é**: Projetar regras críticas de ordenação temporal ou lógica de concorrência no banco de dados assumindo que o relógio de parede da máquina ($System.currentTimeMillis()$) é idêntico em todos os servidores.
+* **O que é**: Projetar regras críticas de ordenação temporal ou lógica de concorrência no banco de dados assumindo que o relógio de parede da máquina (`System.currentTimeMillis()`) é idêntico em todos os servidores.
 * **Por que é ruim**: Devido à deriva física natural do quartzo e atrasos de sincronização NTP, relógios em servidores diferentes podem estar dessincronizados por dezenas ou centenas de milissegundos. Tomar decisões transacionais com base nisso causa perda silenciosa de dados (ex: sobrescrever dados novos com dados velhos na lógica LWW - *Last-Write-Wins*).
 * **Solução**: Usar identificadores únicos lógicos, Relógios Vetoriais, Relógios Lógicos de Lamport, ou mecanismos como Hybrid Logical Clocks (HLC).
 

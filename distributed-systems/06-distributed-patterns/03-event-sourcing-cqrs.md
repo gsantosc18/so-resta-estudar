@@ -32,7 +32,7 @@ O banco de dados principal de escrita torna-se um **Event Store**: um banco pura
 Para saber o saldo atual de uma conta, a aplicação busca todos os eventos associados ao ID da conta no Event Store e os aplica sequencialmente na memória RAM sobre uma instância vazia da classe (processo conhecido como *Replay* ou *Hydration*).
 
 #### 1.3. Snapshots (Instantâneos)
-Se uma conta possuir 10 milhões de eventos, fazer o replay de todos a cada requisição é ineficiente. Para otimizar, o sistema grava periodicamente um **Snapshot** com o estado consolidado no evento $X$ (ex: a cada 1.000 eventos). A reconstrução passa a ler apenas o último snapshot e executa o replay apenas dos eventos ocorridos após o corte do snapshot.
+Se uma conta possuir 10 milhões de eventos, fazer o replay de todos a cada requisição é ineficiente. Para otimizar, o sistema grava periodicamente um **Snapshot** com o estado consolidado no evento *X* (ex: a cada 1.000 eventos). A reconstrução passa a ler apenas o último snapshot e executa o replay apenas dos eventos ocorridos após o corte do snapshot.
 
 ---
 

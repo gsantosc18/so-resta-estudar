@@ -20,8 +20,11 @@ Considere o nosso `LedgerService`. Se o consumidor receber duas mensagens idênt
 ## Conceitos Fundamentais
 
 ### 1. Definição de Idempotência
-Na matemática, uma operação $f$ é considerada idempotente se, quando aplicada múltiplas vezes, produz o mesmo resultado que produziria se aplicada apenas uma vez:
-$$f(f(x)) = f(x)$$
+Na matemática, uma operação *f* é considerada idempotente se, quando aplicada múltiplas vezes, produz o mesmo resultado que produziria se aplicada apenas uma vez:
+
+$$
+f(f(x)) = f(x)
+$$
 
 Na engenharia de software distribuído, um receptor é considerado idempotente se ele consegue processar com segurança a mesma requisição/mensagem repetidas vezes sem alterar o estado do sistema além da primeira execução bem-sucedida, e sem gerar efeitos colaterais adicionais (como enviar múltiplos e-mails ou cobrar o cliente novamente).
 

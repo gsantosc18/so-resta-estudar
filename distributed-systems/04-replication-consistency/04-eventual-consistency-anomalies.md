@@ -41,11 +41,11 @@ A Consistência Eventual é o modelo mais fraco de consistência de dados. Ela g
 
 #### 2.2. Violação de Monotonic Reads (Leituras Monotônicas)
 * **O Fenômeno**: O usuário faz consultas consecutivas a réplicas diferentes. A primeira consulta lê o dado em um seguidor atualizado; a segunda consulta (após o balanceador de carga alternar a conexão TCP para outro seguidor atrasado) lê o dado obsoleto, dando a ilusão de que o tempo correu para trás.
-* **Garantia**: Leituras Monotônicas asseguram que, se um usuário visualizou o valor $V_2$ no tempo, ele nunca mais visualizará o valor anterior $V_1$ em consultas subsequentes.
+* **Garantia**: Leituras Monotônicas asseguram que, se um usuário visualizou o valor *V*₂ no tempo, ele nunca mais visualizará o valor anterior *V*₁ em consultas subsequentes.
 * **Mitigação**: Garantir que as leituras de um mesmo usuário sejam roteadas sempre para a mesma réplica física (ex: sticky sessions no balanceador de carga mapeadas por hash do ID do usuário).
 
 #### 2.3. Violação de Consistent Prefix Reads (Leituras de Prefixo Consistente)
-* **O Fenômeno**: Ocorre em bancos de dados particionados (sharded). Se uma escrita $A$ causou a escrita $B$, mas a replicação de $A$ atrasar na partição 1 enquanto $B$ replicar rápido na partição 2, um leitor global visualizará a consequência antes da causa.
+* **O Fenômeno**: Ocorre em bancos de dados particionados (sharded). Se uma escrita *A* causou a escrita *B*, mas a replicação de *A* atrasar na partição 1 enquanto *B* replicar rápido na partição 2, um leitor global visualizará a consequência antes da causa.
 * **Garantia**: Leituras de Prefixo Consistente asseguram que, se uma sequência de escritas ocorrer em determinada ordem, qualquer leitor verá essas escritas na mesma ordem.
 * **Mitigação**: Garantir que dados que possuam relação causal direta de dependência de negócios residam sempre na mesma partição física do banco.
 

@@ -47,7 +47,7 @@ Como a rede física está sujeita a falhas (partições de rede são fatos físi
 ---
 
 ### 3. A Extensão PACELC (Teorema de Abadi)
-Formulado por Daniel Abadi em 2012, o Teorema PACELC expande o CAP ao observar que o CAP foca apenas no comportamento sob falhas (partições de rede). No entanto, partições são raras; os sistemas de produção passam $99.9\%$ do tempo operando sob **condições estáveis normais**. O PACELC mapeia os trade-offs desse período normal:
+Formulado por Daniel Abadi em 2012, o Teorema PACELC expande o CAP ao observar que o CAP foca apenas no comportamento sob falhas (partições de rede). No entanto, partições são raras; os sistemas de produção passam 99.9% do tempo operando sob **condições estáveis normais**. O PACELC mapeia os trade-offs desse período normal:
 
 Se houver partição (**P**artition), o trade-off é entre **A**vailability e **C**onsistência;
 **E**lse (Senão - em condições estáveis normais), o trade-off é entre **L**atency (Latência) e **C**onsistência.

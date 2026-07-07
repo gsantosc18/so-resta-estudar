@@ -37,7 +37,7 @@ stateDiagram-v2
     HalfOpen --> Open : Falha nos testes
 ```
 
-1. **Closed (Fechado - Operação Normal)**: As requisições passam normalmente. O disjuntor monitora as taxas de erro e tempo de resposta das chamadas (usando uma janela deslizante). Se a taxa de falhas ultrapassar o limite (ex: $50\%$ de falhas nas últimas 100 chamadas), o disjuntor desarma mudando para o estado **Aberto**.
+1. **Closed (Fechado - Operação Normal)**: As requisições passam normalmente. O disjuntor monitora as taxas de erro e tempo de resposta das chamadas (usando uma janela deslizante). Se a taxa de falhas ultrapassar o limite (ex: 50% de falhas nas últimas 100 chamadas), o disjuntor desarma mudando para o estado **Aberto**.
 2. **Open (Aberto - Bloqueio/Falha Rápida)**: O disjuntor impede chamadas reais de rede ao serviço lento. Qualquer requisição do cliente falha instantaneamente (*Fail-Fast*) com erro mapeado (ou retorna um valor padrão de fallback), protegendo a rede contra saturação e dando tempo para o serviço externo se recuperar.
 3. **Half-Open (Meio-Aberto - Testes)**: Após transcorrer um período de tempo (ex: 30 segundos no estado aberto), o disjuntor migra para o estado Meio-Aberto. Ele permite a passagem de poucas requisições de teste.
    * Se os testes falharem, o disjuntor volta para o estado **Aberto** redefinindo o temporizador.
@@ -57,7 +57,10 @@ Tentar reenviar uma requisição imediatamente após uma falha é útil para osc
 Para mitigar isso, retries devem adotar:
 * **Exponential Backoff**: O atraso entre as tentativas subsequentes cresce de forma exponencial (ex: 1s, 2s, 4s, 8s...).
 * **Jitter (Ruído Aleatório)**: Adiciona um atraso aleatório pequeno à fórmula do backoff para dessincronizar as chamadas das instâncias de clientes na rede:
-$$\text{Delay} = (\text{Base} \times 2^{\text{tentativa}}) + \text{Random Jitter}$$
+
+$$
+\text{Delay} = (\text{Base} \times 2^{\text{tentativa}}) + \text{Random Jitter}
+$$
 
 ---
 

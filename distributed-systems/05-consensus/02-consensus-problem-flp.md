@@ -58,7 +58,7 @@ A prova do FLP baseia-se em estados globais de configuração do sistema:
 Para construir sistemas práticos, somos forçados a quebrar pelo menos uma das premissas de impossibilidade do FLP:
 
 #### Abordagem 1: Abandonar o Determinismo (Algoritmos Probabilísticos)
-* **Mecanismo**: Utiliza geradores de números aleatórios ou probabilidade para quebrar a simetria de estados bivalentes (ex: o algoritmo de Ben-Or). O algoritmo garante segurança ($100\%$ de Acordo e Validade) e garante Terminação com probabilidade que converge para $1$ com o tempo.
+* **Mecanismo**: Utiliza geradores de números aleatórios ou probabilidade para quebrar a simetria de estados bivalentes (ex: o algoritmo de Ben-Or). O algoritmo garante segurança (100% de Acordo e Validade) e garante Terminação com probabilidade que converge para 1 com o tempo.
 
 #### Abordagem 2: Abandonar a Assincronia Pura (Uso de Timeouts / Sincronia Parcial)
 * **Mecanismo**: Algoritmos clássicos da indústria (como Paxos, Raft, Zab do ZooKeeper) adotam timeouts baseados em **sincronia parcial** para detectar nós caídos.
@@ -190,7 +190,7 @@ fun main() {
 ---
 
 ## Erros Comuns
-1. **Confiar em Algoritmos sem Quórum**: Tentar programar lógicas de consenso customizadas baseadas em confirmações do tipo "todos os nós devem confirmar". Se um único nó cair, a terminação (Liveness) é perdida para sempre. Algoritmos robustos de consenso exigem apenas quórum de maioria simples ($Q = \lfloor N/2 \rfloor + 1$).
+1. **Confiar em Algoritmos sem Quórum**: Tentar programar lógicas de consenso customizadas baseadas em confirmações do tipo "todos os nós devem confirmar". Se um único nó cair, a terminação (Liveness) é perdida para sempre. Algoritmos robustos de consenso exigem apenas quórum de maioria simples (*Q* = ⌊*N*/2⌋ + 1).
 2. **Subestimar os Efeitos de Partição no etcd/ZooKeeper**: Configurar clusters de consenso com número par de nós (ex: 4 nós). Um cluster de 4 nós exige maioria de 3 nós para operar. Se houver uma partição dividindo-o em 2 e 2, nenhum dos lados terá maioria e o cluster inteiro travará de forma indevida. O correto é sempre utilizar números ímpares de nós (3, 5, 7) para maximizar a tolerância a partições físicas.
 
 ---
@@ -245,16 +245,16 @@ class MockConsensusEngine(private val isNetworkHealthy: Boolean) : ConsensusEngi
    * *Resposta esperada*: Não há contradição física. O algoritmo Raft contorna a impossibilidade do FLP abrindo mão da assincronia pura do modelo matemático. O Raft assume **sincronia parcial** através do uso de **timeouts** e detectores de falhas. Ele utiliza timeouts de eleição e batimentos cardíacos para progredir e tomar decisões. Sob redes instáveis (período assíncrono), o Raft pode sofrer com eleições contínuas divididas sem conseguir eleger um líder (liveness/terminação suspensa temporariamente), mas ele **nunca** comitará dados conflitantes (safety/acordo é garantido). Uma vez que a rede se estabilize (pós-GST), o Raft retoma a terminação rápida instantaneamente. Portanto, o Raft garante segurança total sob qualquer condição, mas garante terminação apenas sob sincronia parcial estável.
 
 2. **Por que um cluster do Apache ZooKeeper de 3 nós tolera o mesmo número de falhas físicas de nós do que um cluster de 4 nós? Qual a vantagem de usar números ímpares?**
-   * *Resposta esperada*: A tolerância a falhas é ditada pela necessidade de manter um quórum de maioria simples ($Q = \lfloor N/2 \rfloor + 1$) de nós ativos.
-     * Em um cluster de 3 nós, a maioria é 2. O sistema tolera a perda de até 1 nó ($3 - 2 = 1$).
-     * Em um cluster de 4 nós, a maioria é 3. O sistema também tolera a perda de apenas 1 nó ($4 - 3 = 1$). Se 2 nós caírem, restam 2 nós, que não representam maioria de 4, travando o cluster.
+   * *Resposta esperada*: A tolerância a falhas é ditada pela necessidade de manter um quórum de maioria simples (*Q* = ⌊*N*/2⌋ + 1) de nós ativos.
+     * Em um cluster de 3 nós, a maioria é 2. O sistema tolera a perda de até 1 nó (3 - 2 = 1).
+     * Em um cluster de 4 nós, a maioria é 3. O sistema também tolera a perda de apenas 1 nó (4 - 3 = 1). Se 2 nós caírem, restam 2 nós, que não representam maioria de 4, travando o cluster.
      Portanto, um cluster de 4 nós não adiciona nenhuma tolerância a falhas extra em relação a um cluster de 3 nós, mas consome mais banda de rede com mensagens de sincronização e adiciona custo financeiro desnecessário. Por isso, motores de consenso sempre utilizam tamanhos ímpares.
 
 ---
 
 ## Resumo
 * Consenso distribuído exige garantir simultaneamente Acordo, Validade e Terminação na rede.
-* Teorema FLP prova a impossibilidade de consenso determinístico $100\%$ seguro e que conclui a execução em redes assíncronas com falhas.
+* Teorema FLP prova a impossibilidade de consenso determinístico 100% seguro e que conclui a execução em redes assíncronas com falhas.
 * Sistemas práticos contornam o FLP adotando timeouts (sincronia parcial) ou algoritmos probabilísticos para quebrar a indecisão de estados bivalentes.
 
 ---

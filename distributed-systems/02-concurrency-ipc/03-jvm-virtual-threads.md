@@ -22,7 +22,7 @@ As **Virtual Threads** surgem para resolver essa limitação física de concorr�
 ## Conceitos Fundamentais
 
 ### 1. Threads de Plataforma (Platform Threads)
-Historicamente, cada thread criada na JVM (uma instância de `java.lang.Thread`) é um mapeamento de $1:1$ para uma thread física do kernel do sistema operacional (SO).
+Historicamente, cada thread criada na JVM (uma instância de `java.lang.Thread`) é um mapeamento de 1:1 para uma thread física do kernel do sistema operacional (SO).
 * **Limitações Físicas**:
   * **Consumo de Memória**: Cada thread de plataforma reserva um espaço de memória física de Stack fixo (geralmente 1MB) para rastrear sua pilha de execução, independentemente de estar ativa ou ociosa. 1000 threads ativas consomem imediatamente cerca de 1GB de RAM estritamente em stacks.
   * **Custo de Criação**: Criar uma thread envolve chamadas de sistema cara do sistema operacional.
@@ -32,7 +32,7 @@ Historicamente, cada thread criada na JVM (uma instância de `java.lang.Thread`)
 
 ### 2. O que são Virtual Threads?
 Introduzidas como recurso estável no Java 21 (Project Loom), as Virtual Threads são threads de peso leve gerenciadas inteiramente pelo runtime da JVM, e não pelo sistema operacional.
-* **Modelo M:N**: Múltiplas Virtual Threads ($M$) são agendadas para rodar sobre poucas Threads de Plataforma ($N$), chamadas de **Carrier Threads** (threads transportadoras).
+* **Modelo M:N**: Múltiplas Virtual Threads (*M*) são agendadas para rodar sobre poucas Threads de Plataforma (*N*), chamadas de **Carrier Threads** (threads transportadoras).
 * **Escalonamento**: A JVM gerencia um pool de Carrier Threads (usando um `ForkJoinPool` FIFO) de tamanho geralmente igual ao número de núcleos de CPU disponíveis no processador.
 
 ```mermaid

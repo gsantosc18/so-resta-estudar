@@ -258,7 +258,7 @@ class TransactionEventConsumer {
 
 ## Erros Comuns
 1. **Ativar Auto-ACK em Filas Críticas**: Deixar o parâmetro `ackMode` como `AUTO` (ou `NONE` no RabbitMQ básico). Em caso de estouro de memória da aplicação do consumidor no meio da execução, a mensagem é perdida de forma irrecuperável.
-2. **Infinite Requeue Loop**: Em caso de erro de processamento, rejeitar a mensagem enviando `basic.nack(deliveryTag, false, true)` (requeue ativo). Se o erro for de validação de dados inválidos (ex: string em campo numérico), o consumidor travará processando a mesma mensagem inválida em loop infinito, consumindo $100\%$ da CPU da máquina.
+2. **Infinite Requeue Loop**: Em caso de erro de processamento, rejeitar a mensagem enviando `basic.nack(deliveryTag, false, true)` (requeue ativo). Se o erro for de validação de dados inválidos (ex: string em campo numérico), o consumidor travará processando a mesma mensagem inválida em loop infinito, consumindo 100% da CPU da máquina.
 
 ---
 

@@ -252,7 +252,7 @@ Escrevemos o arquivo YAML do Ledger definindo a alocação de 3 réplicas redund
 3. Considere que a JVM do seu container Spring Boot está configurada com `-Xmx2g` (tamanho máximo de Heap de 2GB de RAM), mas o manifesto YAML do Kubernetes define o limite físico do container como `limits.memory: "1Gi"`. Descreva detalhadamente a falha física catastrófica que ocorrerá no servidor sob carga intensa e sugira a correção de alinhamento de limites.
 
 ### Avançado
-4. Crie um manifesto YAML completo contendo a definição de um **Horizontal Pod Autoscaler (HPA)** que escalone elasticamente o número de réplicas do `ledger-service` de 3 a 10 réplicas quando o uso médio de CPU das réplicas ultrapassar $75\%$. Explique o algoritmo matemático e a taxa de resiliência que o HPA adiciona ao sistema distribuído.
+4. Crie um manifesto YAML completo contendo a definição de um **Horizontal Pod Autoscaler (HPA)** que escalone elasticamente o número de réplicas do `ledger-service` de 3 a 10 réplicas quando o uso médio de CPU das réplicas ultrapassar 75%. Explique o algoritmo matemático e a taxa de resiliência que o HPA adiciona ao sistema distribuído.
 
 ---
 

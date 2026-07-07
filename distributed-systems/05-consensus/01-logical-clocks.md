@@ -8,7 +8,7 @@ Ao final deste capítulo, você será capaz de explicar os limites de sincroniza
 ## Motivação
 Nos módulos anteriores, estudamos como replicar e particionar dados. Mas e se dois clientes tentarem atualizar a mesma conta bancária simultaneamente em réplicas separadas por uma partição de rede? 
 
-Muitos desenvolvedores tentam resolver isso gravando a hora de parede ($System.currentTimeMillis()$) no banco de dados e escolhendo o valor que tiver o maior timestamp (lógica *Last-Write-Wins - LWW*). Contudo, como vimos, relógios físicos sofrem deriva. Se o relógio do Nó A estiver adiantado por apenas 20 milissegundos em relação ao Nó B, escritas antigas do Nó A podem sobrescrever de forma invisível dados legítimos mais novos do Nó B.
+Muitos desenvolvedores tentam resolver isso gravando a hora de parede (`System.currentTimeMillis()`) no banco de dados e escolhendo o valor que tiver o maior timestamp (lógica *Last-Write-Wins - LWW*). Contudo, como vimos, relógios físicos sofrem deriva. Se o relógio do Nó A estiver adiantado por apenas 20 milissegundos em relação ao Nó B, escritas antigas do Nó A podem sobrescrever de forma invisível dados legítimos mais novos do Nó B.
 
 Para ordenar transações financeiras ou estados de réplicas de forma confiável, não podemos confiar no tempo de relógio de parede. Precisamos de **Tempo Lógico** para determinar quem causou o quê.
 
@@ -21,50 +21,59 @@ Para ordenar transações financeiras ou estados de réplicas de forma confiáve
 
 ## Conceitos Fundamentais
 
-### 1. A Relação Happened-Before (Aconteceu Antes: $\to$)
-Formulada por Leslie Lamport em seu paper de 1978, a relação Happened-Before (representada pelo símbolo $\to$) define uma ordem parcial de eventos em um sistema distribuído sem depender de relógios físicos.
+### 1. A Relação Happened-Before (Aconteceu Antes: →)
+Formulada por Leslie Lamport em seu paper de 1978, a relação Happened-Before (representada pelo símbolo →) define uma ordem parcial de eventos em um sistema distribuído sem depender de relógios físicos.
 
-A relação $\to$ é regida por três regras estritas:
-1. **Ordem Local**: Se os eventos $a$ e $b$ ocorrem dentro do mesmo processo, e $a$ ocorre antes de $b$, então $a \to b$.
-2. **Envio e Recebimento**: Se o evento $a$ é o envio de uma mensagem por um processo, e o evento $b$ é o recebimento dessa mesma mensagem por outro processo, então $a \to b$.
-3. **Transitividade**: Se $a \to b$ e $b \to c$, então $a \to c$.
+A relação → é regida por três regras estritas:
+1. **Ordem Local**: Se os eventos *a* e *b* ocorrem dentro do mesmo processo, e *a* ocorre antes de *b*, então *a* → *b*.
+2. **Envio e Recebimento**: Se o evento *a* é o envio de uma mensagem por um processo, e o evento *b* é o recebimento dessa mesma mensagem por outro processo, então *a* → *b*.
+3. **Transitividade**: Se *a* → *b* e *b* → *c*, então *a* → *c*.
 
-#### Concorrência ($\parallel$)
-Se não podemos afirmar que $a \to b$ nem que $b \to a$ através das regras acima, dizemos que os eventos $a$ e $b$ são **concorrentes** (representado por $a \parallel b$). Isso significa que eles ocorreram de forma independente, sem que um tivesse conhecimento ou influenciasse o outro.
+#### Concorrência (||)
+Se não podemos afirmar que *a* → *b* nem que *b* → *a* através das regras acima, dizemos que os eventos *a* e *b* são **concorrentes** (representado por *a* || *b*). Isso significa que eles ocorreram de forma independente, sem que um tivesse conhecimento ou influenciasse o outro.
 
 ---
 
 ### 2. Relógios Lógicos de Lamport (Lamport Timestamps)
 Um Relógio de Lamport é um contador numérico inteiro associado a cada processo. O algoritmo garante a propriedade:
-$$\text{Se } a \to b, \text{ então } L(a) < L(b)$$
+
+$$
+\text{Se } a \to b, \text{ então } L(a) < L(b)
+$$
 
 #### Algoritmo de Incremento e Transição
-1. Cada nó inicializa seu relógio local $L = 0$.
-2. Antes de executar um evento local, o nó incrementa seu relógio: $L = L + 1$.
-3. Ao enviar uma mensagem, o nó anexa o valor do seu relógio $L$ atualizado no payload.
-4. Ao receber uma mensagem com o carimbo $L_{\text{msg}}$, o nó receptor atualiza seu relógio local fazendo:
-$$L_{\text{local}} = \max(L_{\text{local}}, L_{\text{msg}}) + 1$$
+1. Cada nó inicializa seu relógio local *L* = 0.
+2. Antes de executar um evento local, o nó incrementa seu relógio: *L* = *L* + 1.
+3. Ao enviar uma mensagem, o nó anexa o valor do seu relógio *L* atualizado no payload.
+4. Ao receber uma mensagem com o carimbo *L*_msg, o nó receptor atualiza seu relógio local fazendo:
 
-* **Limitação Física**: Os relógios de Lamport geram uma ordenação total artificial. Se $L(a) < L(b)$, **não podemos inferir que $a \to b$**. Os eventos podem ser perfeitamente concorrentes e ter carimbos ordenados de forma arbitrária pelo algoritmo.
+$$
+L_{\text{local}} = \max(L_{\text{local}}, L_{\text{msg}}) + 1
+$$
+
+* **Limitação Física**: Os relógios de Lamport geram uma ordenação total artificial. Se *L*(*a*) < *L*(*b*), **não podemos inferir que *a* → *b***. Os eventos podem ser perfeitamente concorrentes e ter carimbos ordenados de forma arbitrária pelo algoritmo.
 
 ---
 
 ### 3. Relógios Vetoriais (Vector Clocks)
-Diferente de Lamport, os Relógios Vetoriais permitem detectar se dois eventos são causais ou concorrentes ($a \parallel b$).
-Um Relógio Vetorial para um cluster de $N$ nós é um vetor de inteiros de tamanho $N$, representado por $V$.
+Diferente de Lamport, os Relógios Vetoriais permitem detectar se dois eventos são causais ou concorrentes (*a* || *b*).
+Um Relógio Vetorial para um cluster de *N* nós é um vetor de inteiros de tamanho $N$, representado por *V*.
 
 #### Algoritmo de Atualização
-1. Cada nó inicializa seu vetor com zeros: $V = [0, 0, \dots, 0]$.
-2. Antes de um evento local, o nó $i$ incrementa sua própria entrada no vetor: $V[i] = V[i] + 1$.
-3. Ao enviar uma mensagem, o nó $i$ anexa seu vetor $V$ na mensagem.
-4. Ao receber uma mensagem contendo $V_{\text{msg}}$, o nó receptor $j$:
-   * Incrementa sua própria entrada: $V[j] = V[j] + 1$.
+1. Cada nó inicializa seu vetor com zeros: *V* = [0, 0, ..., 0].
+2. Antes de um evento local, o nó *i* incrementa sua própria entrada no vetor: *V*[*i*] = *V*[*i*] + 1.
+3. Ao enviar uma mensagem, o nó *i* anexa seu vetor *V* na mensagem.
+4. Ao receber uma mensagem contendo *V*_msg, o nó receptor $j$:
+   * Incrementa sua própria entrada: *V*[*j*] = *V*[*j*] + 1.
    * Atualiza as outras entradas pegando o máximo elemento a elemento:
-$$\forall k \neq j, \quad V[k] = \max(V[k], V_{\text{msg}}[k])$$
+
+$$
+\forall k \neq j, \quad V[k] = \max(V[k], V_{\text{msg}}[k])
+$$
 
 #### Comparação de Vetores
-* $V(a) < V(b) \iff \forall k, V(a)[k] \le V(b)[k]$ e pelo menos um elemento é estritamente menor. Indica que $a$ causou causou $b$ ($a \to b$).
-* Se nem $V(a) \le V(b)$ nem $V(b) \le V(a)$, os eventos $a$ e $b$ são **concorrentes** ($a \parallel b$). Indica conflito de dados que deve ser resolvido.
+* $V(a) < V(b) \iff \forall k, V(a)[k] \le V(b)[k]$ e pelo menos um elemento é estritamente menor. Indica que *a* causou *b* (*a* → *b*).
+* Se nem *V*(*a*) ≤ *V*(*b*) nem *V*(*b*) ≤ *V*(*a*), os eventos *a* e *b* são **concorrentes** ($a \parallel b$). Indica conflito de dados que deve ser resolvido.
 
 ```mermaid
 sequenceDiagram
@@ -240,7 +249,7 @@ fun main() {
 ---
 
 ## Desvantagens
-* **Crescimento de Metadados (Vector Clocks)**: O tamanho do vetor cresce proporcionalmente ao número de nós $N$ no cluster. Se o cluster possuir 10.000 nós de banco de dados, cada pequeno registro de dados terá que trafegar um vetor de 10.000 inteiros adicionais como cabeçalho na rede, consumindo largura de banda.
+* **Crescimento de Metadados (Vector Clocks)**: O tamanho do vetor cresce proporcionalmente ao número de nós *N* no cluster. Se o cluster possuir 10.000 nós de banco de dados, cada pequeno registro de dados terá que trafegar um vetor de 10.000 inteiros adicionais como cabeçalho na rede, consumindo largura de banda.
 
 ---
 
@@ -251,9 +260,9 @@ fun main() {
 | Característica | Lamport Timestamps | Vector Clocks |
 |---|---|---|
 | **Formato Físico** | Um número inteiro simples | Um vetor/map de inteiros |
-| **Garantia de Causalidade** | Se $a \to b$, então $L(a) < L(b)$ | Se $a \to b$, então $V(a) < V(b)$ |
-| **Garantia Inversa** | Não (se $L(a) < L(b)$, $a$ pode não ter causado $b$) | Sim ($V(a) < V(b) \implies a \to b$) |
-| **Identifica Concorrência?** | Não (concorrentes recebem ordenação arbitrária) | Sim (identifica concorrência $a \parallel b$ na comparação) |
+| **Garantia de Causalidade** | Se *a* → *b*, então *L*(*a*) < *L*(*b*) | Se *a* → *b*, então *V*(*a*) < *V*(*b*) |
+| **Garantia Inversa** | Não (se *L*(*a*) < *L*(*b*), *a* pode não ter causado *b*) | Sim (*V*(*a*) < *V*(*b*) ⇒ *a* → *b*) |
+| **Identifica Concorrência?** | Não (concorrentes recebem ordenação arbitrária) | Sim (identifica concorrência *a* || *b* na comparação) |
 
 ---
 
@@ -317,7 +326,7 @@ class CollaborativeLedgerRecord {
 
 ### Básico
 1. Qual o limite físico dos relógios de tempo de parede (físicos) em redes distribuídas?
-2. Defina o conceito de eventos concorrentes ($a \parallel b$) de acordo com Leslie Lamport.
+2. Defina o conceito de eventos concorrentes (*a* || *b*) de acordo com Leslie Lamport.
 
 ### Intermediário
 3. Considere três processos ($P_1, P_2, P_3$). $P_1$ executa evento local ($e_{11}$), envia mensagem $m_1$ para $P_2$. $P_2$ recebe $m_1$ ($e_{21}$), executa evento local ($e_{22}$), envia $m_2$ para $P_3$. $P_3$ recebe $m_2$ ($e_{31}$). Calcule manualmente os carimbos de tempo lógico de Lamport para cada evento e verifique se a relação Happened-Before é preservada.
@@ -338,7 +347,7 @@ class CollaborativeLedgerRecord {
 
 ## Resumo
 * Relógios físicos locais sofrem deriva térmica imprevisível, sendo ineficientes para ordenar transações distribuídas consistentes.
-* Happened-Before ($\to$) define a relação de causalidade e concorrência parcial de eventos distribuídos de forma segura.
+* Happened-Before (→) define a relação de causalidade e concorrência parcial de eventos distribuídos de forma segura.
 * Relógios Vetoriais superam os de Lamport permitindo detectar concorrência e conflitos de dados a custo de crescimento de metadados vetoriais.
 
 ---

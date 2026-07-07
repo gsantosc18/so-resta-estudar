@@ -45,7 +45,7 @@ stateDiagram-v2
 ```
 
 * **Follower ──► Candidate**: Ocorre se o timeout de eleição expirar sem heartbeats.
-* **Candidate ──► Leader**: Ocorre se o candidato obtiver votos de uma maioria simples do cluster ($Q = \lfloor N/2 \rfloor + 1$).
+* **Candidate ──► Leader**: Ocorre se o candidato obtiver votos de uma maioria simples do cluster (*Q* = ⌊*N*/2⌋ + 1).
 * **Candidate ──► Follower**: Ocorre se o candidato descobrir que outro nó já foi eleito líder com termo igual ou superior, ou receber um pacote com termo mais novo.
 * **Leader ──► Follower**: Ocorre se o líder ativo descobrir uma mensagem com termo superior ao seu.
 
@@ -59,10 +59,10 @@ Para solicitar votos, um Candidato dispara concorrentemente para todos os nós a
 * `lastLogTerm`: O termo do último registro de log do candidato.
 
 #### Regras para Concessão de Votos
-Um nó seguidor $A$ concede seu voto para o candidato $B$ se, e somente se:
-1. O termo de $B$ for maior ou igual ao termo atual de $A$.
-2. O nó $A$ ainda não tiver votado em ninguém no termo atual (`votedFor` nulo ou igual a $B$).
-3. O log do candidato $B$ for pelo menos tão atualizado quanto o log de $A$ (verificação de segurança de log).
+Um nó seguidor *A* concede seu voto para o candidato *B* se, e somente se:
+1. O termo de *B* for maior ou igual ao termo atual de *A*.
+2. O nó *A* ainda não tiver votado em ninguém no termo atual (`votedFor` nulo ou igual a *B*).
+3. O log do candidato *B* for pelo menos tão atualizado quanto o log de *A* (verificação de segurança de log).
 
 ---
 

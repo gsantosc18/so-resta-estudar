@@ -36,17 +36,21 @@ Particionamento é o processo de dividir um grande conjunto de dados (como uma t
 * **Desvantagem (Hotspots)**: Se a distribuição de uso real das chaves for desigual (ex: todas as requisições forem de chaves iniciando com a letra D), uma única partição ficará sobrecarregada física e termicamente enquanto as outras ficam ociosas.
 
 #### 2.2. Particionamento por Hash de Chave (Hash Partitioning)
-* **Mecanismo**: Aplica-se uma função Hash sobre a chave do registro para gerar um número pseudo-aleatório distribuído uniformemente. O nó é selecionado aplicando o resto da divisão pelo número de nós $N$:
-$$\text{Nó ID} = \text{hash}(\text{chave}) \pmod N$$
+* **Mecanismo**: Aplica-se uma função Hash sobre a chave do registro para gerar um número pseudo-aleatório distribuído uniformemente. O nó é selecionado aplicando o resto da divisão pelo número de nós *N*:
+
+$$
+\text{Nó ID} = \text{hash}(\text{chave}) \pmod N
+$$
+
 * **Vantagem**: Distribuição de dados perfeitamente equilibrada entre os servidores, eliminando hotspots.
 * **Desvantagem**: Perda total da capacidade de consultas de faixa eficientes. Chaves sequenciais (ex: `1`, `2`, `3`) serão espalhadas por nós totalmente diferentes na rede.
-* **O Problema de Rebalanceamento ($N$ dinâmico)**: Se o número de nós $N$ mudar (adicionar ou remover um servidor do cluster), o resultado do cálculo do módulo muda para quase todas as chaves existentes. Isso força a migração física de quase todo o banco de dados entre os servidores na rede, gerando lentidão extrema e consumo de banda de rede.
+* **O Problema de Rebalanceamento (*N* dinâmico)**: Se o número de nós *N* mudar (adicionar ou remover um servidor do cluster), o resultado do cálculo do módulo muda para quase todas as chaves existentes. Isso força a migração física de quase todo o banco de dados entre os servidores na rede, gerando lentidão extrema e consumo de banda de rede.
 
 ---
 
 ### 3. Consistent Hashing (Espalhamento Consistente)
 Consistent Hashing é a técnica matemática desenvolvida para mitigar a movimentação massiva de dados quando nós entram ou saem do cluster.
-* **O Anel de Hash (Hash Ring)**: A função hash mapeia valores em um intervalo circular (ex: de $0$ a $2^{32}-1$). Imagine esse intervalo como um anel fechado.
+* **O Anel de Hash (Hash Ring)**: A função hash mapeia valores em um intervalo circular (ex: de 0 a 2³² - 1). Imagine esse intervalo como um anel fechado.
 * **Mapeamento de Nós**: Os servidores do cluster são mapeados no anel aplicando o hash do seus nomes/IPs.
 * **Mapeamento de Chaves**: A chave do registro é mapeada no mesmo anel. O registro é armazenado no **primeiro nó encontrado percorrendo o anel no sentido horário** a partir da posição do hash da chave.
 * **Nós Virtuais (Virtual Nodes / Vnodes)**: Para evitar distribuição desigual de dados no anel, cada servidor físico é mapeado em múltiplas posições fictícias diferentes do anel (ex: 256 nós virtuais por nó físico).
@@ -210,11 +214,11 @@ fun main() {
 
 ### Estratégias de Particionamento
 
-| Dimensão | Key Range (Faixa) | Hash de Chave (Mod $N$) | Consistent Hashing |
+| Dimensão | Key Range (Faixa) | Hash de Chave (Mod *N*) | Consistent Hashing |
 |---|---|---|---|
 | **Distribuição** | Irregular (risco de hotspots) | Perfeitamente uniforme | Uniforme (com nós virtuais) |
 | **Consultas de Faixa** | Nativo e eficiente | Ineficiente (Scatter-gather) | Ineficiente (Scatter-gather) |
-| **Movimentação no Redimensionamento** | Média | Quase $100\%$ dos dados migram | Mínima (apenas fração $1/N$ migra) |
+| **Movimentação no Redimensionamento** | Média | Quase 100% dos dados migram | Mínima (apenas fração $1/N$ migra) |
 
 ---
 
@@ -275,14 +279,14 @@ class ShardedLedgerRouter(private val nodes: List<LedgerNode>) {
 ## Exercícios
 
 ### Básico
-1. Qual o problema de rebalanceamento de dados gerado pela estratégia de Hash Modulo $N$ simples quando o número de nós $N$ do cluster é alterado?
+1. Qual o problema de rebalanceamento de dados gerado pela estratégia de Hash Modulo *N* simples quando o número de nós *N* do cluster é alterado?
 2. Explique o papel dos Nós Virtuais (*Vnodes*) no anel de Consistent Hashing.
 
 ### Intermediário
 3. Considere um sistema de e-commerce que precisa particionar as tabelas `orders` (pedidos) e `order_items` (itens do pedido). Sugira uma chave de partição eficaz para ambas as tabelas que permita que consultas de visualização de detalhes de compras do usuário não exijam operações de Scatter-Gather. Justifique a sua escolha arquitetural.
 
 ### Avançado
-4. Modifique a classe `ConsistentHashRing` apresentada neste capítulo para coletar e medir a porcentagem exata de dados que precisam ser migrados fisicamente quando o cluster passa de 3 nós para 4 nós. Simule um dicionário de 1.000 chaves aleatórias em memória e calcule quantas delas mudaram de nó físico responsável após a adição do quarto nó. O resultado deve comprovar matematicamente a eficiência do Consistent Hashing em comparação com a redistribuição total do Hash Modulo $N$.
+4. Modifique a classe `ConsistentHashRing` apresentada neste capítulo para coletar e medir a porcentagem exata de dados que precisam ser migrados fisicamente quando o cluster passa de 3 nós para 4 nós. Simule um dicionário de 1.000 chaves aleatórias em memória e calcule quantas delas mudaram de nó físico responsável após a adição do quarto nó. O resultado deve comprovar matematicamente a eficiência do Consistent Hashing em comparação com a redistribuição total do Hash Modulo *N*.
 
 ---
 

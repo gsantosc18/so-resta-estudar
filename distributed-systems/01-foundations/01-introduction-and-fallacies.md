@@ -86,7 +86,10 @@ Quando você dispara uma chamada de rede em nível de aplicação (ex: `client.g
 6. **Deserialização**: O servidor converte os bytes de volta para o objeto de aplicação.
 
 A latência física é composta de:
-$$\text{Latência Total} = \text{Tempo de Processamento (CPU)} + \text{Tempo de Transmissão (tamanho/velocidade do link)} + \text{Tempo de Propagação (distância física)} + \text{Tempo de Fila (roteadores)}$$
+
+$$
+\text{Latência Total} = \text{Tempo de Processamento (CPU)} + \text{Tempo de Transmissão (tamanho/velocidade do link)} + \text{Tempo de Propagação (distância física)} + \text{Tempo de Fila (roteadores)}
+$$
 
 ---
 
@@ -238,9 +241,9 @@ Sistemas distribuídos devem ser adotados **apenas** quando:
 
 | Dimensão | Chamada em Memória (Local) | Chamada de Rede (Distribuído) |
 |---|---|---|
-| **Velocidade típica** | 10 a 100 nanossegundos | 1 a 150 milissegundos (até $1.500.000\times$ mais lento) |
+| **Velocidade típica** | 10 a 100 nanossegundos | 1 a 150 milissegundos (até 1.500.000× mais lento) |
 | **Modelo de falha** | Binário (ou roda tudo ou a aplicação cai inteira) | Parcial (o cliente continua rodando, o servidor cai ou a rede some) |
-| **Garantia de entrega** | $100\%$ garantido pela CPU/JVM | Sem garantia sem protocolos de confirmação redundantes |
+| **Garantia de entrega** | 100% garantido pela CPU/JVM | Sem garantia sem protocolos de confirmação redundantes |
 | **Segurança** | Protegido pelo isolamento de memória do SO | Aberto a interceptação se não houver criptografia física/lógica |
 
 ---
@@ -291,7 +294,7 @@ sealed class TransactionResult {
 2. Cite 3 das 8 Falácias da Computação Distribuída que afetam diretamente o tempo de resposta percebido pelo usuário final de uma aplicação web.
 
 ### Intermediário
-3. Considere que um servidor A em São Paulo precisa consultar o saldo de uma conta em um servidor B em Frankfurt (distância aproximada de $9.800\text{ km}$). Sabendo que a velocidade da luz na fibra ótica é de aproximadamente $200.000\text{ km/s}$ e assumindo processamento local nulo e nenhuma perda de pacotes, calcule o limite físico teórico mínimo para o tempo de resposta (*Round Trip Time - RTT*). Por que a latência real medida na internet será superior a esse valor?
+3. Considere que um servidor A em São Paulo precisa consultar o saldo de uma conta em um servidor B em Frankfurt (distância aproximada de 9.800 km). Sabendo que a velocidade da luz na fibra ótica é de aproximadamente 200.000 km/s e assumindo processamento local nulo e nenhuma perda de pacotes, calcule o limite físico teórico mínimo para o tempo de resposta (*Round Trip Time - RTT*). Por que a latência real medida na internet será superior a esse valor?
 
 ### Avançado
 4. Escreva um pequeno programa em Kotlin ou Java que use o `HttpClient` nativo para fazer chamadas HTTP consecutivas a uma API pública externa (ex: `https://httpbin.org/delay/2`). Implemente um loop que tente reexecutar a chamada em caso de falha de rede utilizando a estratégia de **Linear Backoff** (esperar tempo incremental fixo a cada tentativa). Limite a execução a 3 tentativas e trate as exceções de timeout de forma apropriada.

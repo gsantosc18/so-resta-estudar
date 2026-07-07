@@ -27,8 +27,8 @@ Para o cliente, todos esses cenários se manifestam exatamente da mesma forma: *
 Para projetar algoritmos distribuídos que funcionem em redes reais, a ciência da computação define três premissas de tempo:
 
 #### 1.1. Modelo Síncrono (Synchronous System Model)
-* **Definição**: Assume que existe um limite superior conhecido e fixo $D$ para o tempo de trânsito de qualquer mensagem na rede, e um limite superior para o tempo de processamento de qualquer nó.
-* **Corretude**: Se uma mensagem não chegou dentro de $D$ segundos, o remetente pode afirmar com **absoluta certeza** que a mensagem foi perdida ou que o destinatário falhou.
+* **Definição**: Assume que existe um limite superior conhecido e fixo *D* para o tempo de trânsito de qualquer mensagem na rede, e um limite superior para o tempo de processamento de qualquer nó.
+* **Corretude**: Se uma mensagem não chegou dentro de *D* segundos, o remetente pode afirmar com **absoluta certeza** que a mensagem foi perdida ou que o destinatário falhou.
 * **Realidade**: É uma abstração irrealista para redes WAN ou internet. Redes reais sofrem com flutuações de tráfego, retransmissões e filas nos roteadores.
 
 #### 1.2. Modelo Assíncrono (Asynchronous System Model)
@@ -71,7 +71,7 @@ Um detector de falhas é um mecanismo local que monitora o status de nós remoto
 2. **Accuracy (Precisão)**: Nenhum nó saudável será suspeitado incorretamente de ter falhado.
 
 > [!WARNING]
-> **Impossibilidade Teórica**: Sob o modelo assíncrono de rede, é **matematicamente impossível** construir um detector de falhas que seja simultaneamente $100\%$ Completo e $100\%$ Preciso. Nós sempre teremos que escolher entre detectar falhas rapidamente (gerando falsos positivos) ou evitar falsos suspeitos (demorando muito para detectar nós realmente mortos).
+> **Impossibilidade Teórica**: Sob o modelo assíncrono de rede, é **matematicamente impossível** construir um detector de falhas que seja simultaneamente 100% Completo e 100% Preciso. Nós sempre teremos que escolher entre detectar falhas rapidamente (gerando falsos positivos) ou evitar falsos suspeitos (demorando muito para detectar nós realmente mortos).
 
 ---
 
@@ -200,7 +200,7 @@ fun main() = runBlocking {
 ---
 
 ## Casos de Uso
-* **Apache Cassandra**: Utiliza o **Phi Accrual Failure Detector** (baseado no paper de Hayashibara et al.). Em vez de usar um timeout fixo (ex: 2 segundos), o Cassandra registra o histórico de intervalos entre heartbeats de cada nó e calcula uma escala de probabilidade contínua $\Phi$. Se a latência da rede oscilar, o detector se adapta estatisticamente, evitando falsos alarmes de nós "fora do ar".
+* **Apache Cassandra**: Utiliza o **Phi Accrual Failure Detector** (baseado no paper de Hayashibara et al.). Em vez de usar um timeout fixo (ex: 2 segundos), o Cassandra registra o histórico de intervalos entre heartbeats de cada nó e calcula uma escala de probabilidade contínua *Φ*. Se a latência da rede oscilar, o detector se adapta estatisticamente, evitando falsos alarmes de nós "fora do ar".
 * **Kubernetes (K8s) Leases**: Desde a versão 1.14, o Kubernetes gerencia heartbeats de nós através de objetos do tipo `Lease` (locação). Cada nó Kubelet atualiza seu Lease a cada 10 segundos. Se o plano de controle (API Server) não detectar atualizações no Lease, ele suspeita do nó e agenda o despejo de pods (*pod eviction*), mas aguarda uma janela de tolerância para evitar ações precipitadas em caso de queda temporária.
 
 ---
@@ -232,7 +232,7 @@ fun main() = runBlocking {
 
 | Característica | Síncrono | Assíncrono | Parcialmente Síncrono |
 |---|---|---|---|
-| **Limite de tempo de rede ($D$)** | Garantido e conhecido | Inexistente/Arbitrário | Eventualmente garantido após GST |
+| **Limite de tempo de rede (*D*)** | Garantido e conhecido | Inexistente/Arbitrário | Eventualmente garantido após GST |
 | **Garantia de segurança de rede** | Alta (simples de garantir) | Difícil (exige algoritmos complexos) | Balanço real da indústria |
 | **Uso prático** | Redes locais determinísticas (LANs industriais) | Modelagem teórica rigorosa | Internet e nuvem pública (AWS, GCP) |
 
@@ -305,7 +305,7 @@ class LedgerReplicaMonitor(
 3. Desenhe um fluxograma ou diagrama no papel demonstrando o cenário de **Split-Brain** gerado por uma partição de rede física em um cluster com 2 nós (Líder e Passivo), destacando o momento em que ambos passam a acreditar que são os líderes legítimos.
 
 ### Avançado
-4. Modifique a classe `FixedTimeoutFailureDetector` do exemplo prático do capítulo para implementar uma política de **Timeout Adaptativo Histórico Simples**. A classe deve armazenar os últimos 5 intervalos entre heartbeats recebidos do nó e definir o timeout dinamicamente como $2.5 \times$ a média desses intervalos históricos. Se o desvio padrão for alto, o timeout deve subir proporcionalmente.
+4. Modifique a classe `FixedTimeoutFailureDetector` do exemplo prático do capítulo para implementar uma política de **Timeout Adaptativo Histórico Simples**. A classe deve armazenar os últimos 5 intervalos entre heartbeats recebidos do nó e definir o timeout dinamicamente como 2.5× a média desses intervalos históricos. Se o desvio padrão for alto, o timeout deve subir proporcionalmente.
 
 ---
 

@@ -24,7 +24,10 @@ Embora frameworks modernos ocultem os sockets sob camadas de HTTP e REST, entend
 ### 1. Sockets de Rede (Network Sockets)
 Um Socket é uma abstração de software fornecida pelo sistema operacional que atua como o ponto final (endpoint) de uma conexão bidirecional de comunicação entre dois programas rodando na rede.
 Fisicamente, um socket é identificado pela combinação de:
-$$\text{Socket} = \text{Endereço IP} + \text{Porta TCP/UDP}$$
+
+$$
+\text{Socket} = \text{Endereço IP} + \text{Porta TCP/UDP}
+$$
 
 #### 1.1. Tipos de Sockets
 * **Stream Sockets (TCP - Transmission Control Protocol)**:
@@ -282,7 +285,7 @@ class LedgerController {
    * *Resposta esperada*: Port Exhaustion ocorre quando um cliente de rede consome todas as portas efêmeras locais disponíveis (geralmente entre as portas 32768 e 61000) e não consegue abrir novos sockets para conexões de saída. Isso acontece em microserviços REST quando o desenvolvedor não reutiliza conexões HTTP e instancia novos clientes de rede para cada requisição. O sistema operacional não libera a porta imediatamente após o fechamento da conexão física; a porta permanece retida no estado `TIME_WAIT` por minutos para garantir que pacotes atrasados da rede não sejam entregues indevidamente. Sob alta vazão, novas conexões abertas a cada requisição esgotam a pool de portas do SO. A mitigação consiste em utilizar uma pool de conexões HTTP persistente (*HTTP Connection Pooling*), reutilizando as mesmas conexões TCP e soquetes já estabelecidos para múltiplas chamadas consecutivas.
 
 2. **Como a propriedade de acoplamento temporal inerente ao REST síncrono impacta a disponibilidade geral de uma cadeia de chamadas de microserviços?**
-   * *Resposta esperada*: O acoplamento temporal exige que todos os componentes de uma cadeia de chamadas estejam ativos e saudáveis simultaneamente para que a operação global tenha sucesso. A disponibilidade teórica de um sistema com acoplamento síncrono em cadeia é o produto das disponibilidades individuais de cada serviço ($A_{\text{total}} = A_1 \times A_2 \times A_3$). Se tivermos 4 microserviços em série, cada um com $99.9\%$ de disponibilidade, a disponibilidade final da transação cai para aproximadamente $99.6\%$. Se um único serviço da cadeia ficar offline ou lento, toda a chamada cai em cascata, degradando a resiliência geral.
+   * *Resposta esperada*: O acoplamento temporal exige que todos os componentes de uma cadeia de chamadas estejam ativos e saudáveis simultaneamente para que a operação global tenha sucesso. A disponibilidade teórica de um sistema com acoplamento síncrono em cadeia é o produto das disponibilidades individuais de cada serviço ($A_{\text{total}} = A_1 \times A_2 \times A_3$). Se tivermos 4 microserviços em série, cada um com 99.9% de disponibilidade, a disponibilidade final da transação cai para aproximadamente 99.6%. Se um único serviço da cadeia ficar offline ou lento, toda a chamada cai em cascata, degradando a resiliência geral.
 
 ---
 

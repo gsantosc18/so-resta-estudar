@@ -23,7 +23,7 @@ Se um seguidor cair no meio do caminho e retornar com seu log corrompido ou desa
 
 ### 1. O Paradigma da Máquina de Estados Replicada (SMR)
 O Raft baseia-se no paradigma **State Machine Replication (SMR)**. 
-* **Abstração**: Um microserviço é modelado como uma máquina de estados determinística (dado um estado inicial $S_0$ e uma sequência de comandos ordenados $C_1, C_2, \dots, C_n$, a máquina de estados sempre atingirá o mesmo estado final $S_n$).
+* **Abstração**: Um microserviço é modelado como uma máquina de estados determinística (dado um estado inicial *S*₀ e uma sequência de comandos ordenados *C*₁, *C*₂, ..., *C*ₙ, a máquina de estados sempre atingirá o mesmo estado final *S*ₙ).
 * **O Consenso**: Garante que todos os nós do cluster tenham exatamente a **mesma sequência de comandos gravada no log**. Se os logs forem idênticos, as aplicações locais executarão os mesmos comandos e chegarão ao mesmo saldo final de conta de forma idêntica.
 
 ---
@@ -44,15 +44,19 @@ Ao receber um `AppendEntries`, o seguidor:
 3. **Resolução de Conflitos**: Se um registro existente conflitar com uma nova entrada (mesmo índice, mas termos diferentes), o seguidor **deleta o registro existente e todos os registros subsequentes** no seu log.
 4. **Append**: Adiciona as novas entradas ao final de seu log local.
 5. **Commit**: Se `leaderCommit > commitIndex`, atualiza seu índice de commit local para:
-$$\text{commitIndex} = \min(\text{leaderCommit}, \text{índice do último log novo})$$
+
+$$
+\text{commitIndex} = \min(\text{leaderCommit}, \text{índice do último log novo})
+$$
+
 E aplica as mensagens comitadas na sua máquina de estados de negócios local.
 
 ---
 
 ### 3. Algoritmo de Reconciliação do Líder (nextIndex e matchIndex)
 O líder mantém dois ponteiros em memória para cada seguidor do cluster:
-* `nextIndex[i]`: O índice do próximo registro de log que o líder enviará para o seguidor $i$. Inicializado como o índice do último log do líder $+ 1$.
-* `matchIndex[i]`: O índice do maior registro de log conhecido que já foi replicado com sucesso no seguidor $i$. Inicializado como $0$.
+* `nextIndex[i]`: O índice do próximo registro de log que o líder enviará para o seguidor *i*. Inicializado como o índice do último log do líder + 1.
+* `matchIndex[i]`: O índice do maior registro de log conhecido que já foi replicado com sucesso no seguidor *i*. Inicializado como 0.
 
 #### O Processo de Busca do Ponto de Sincronia
 * Se um seguidor rejeitar a chamada `AppendEntries` devido a falha de consistência, o líder decrementa o `nextIndex` daquele seguidor (ex: `nextIndex = nextIndex - 1`) e tenta enviar novamente.
